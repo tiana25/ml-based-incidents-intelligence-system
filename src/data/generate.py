@@ -12,139 +12,171 @@ HIGH_KEYWORDS = ["critical", "outage", "down", "failed", "fatal",
 MEDIUM_KEYWORDS = ["warning", "slow", "degraded", "latency",
                    "timeout", "retry", "elevated", "error"]
 
-TICKET_TEMPLATES = {
+SERVICES_NETWORK = [
+    "edge-router-01", "core-switch-A", "wan-gateway", "dns-resolver-prod",
+    "nat-gateway-eu", "vpn-concentrator", "firewall-cluster", "load-balancer-web",
+    "bgp-peer-isp1", "dhcp-server-hq", "spine-switch-02", "border-router",
+]
+SERVICES_AUTH = [
+    "auth-service", "sso-provider", "ldap-directory", "kerberos-kdc",
+    "oauth2-server", "api-gateway", "session-store", "mfa-broker",
+    "ad-connector", "saml-proxy", "token-service", "identity-provider",
+]
+SERVICES_DEPLOY = [
+    "payments-api", "order-service", "inventory-svc", "notification-worker",
+    "reporting-api", "search-service", "checkout-svc", "auth-worker",
+    "data-pipeline", "analytics-api", "billing-service", "gateway-proxy",
+]
+USERS = [
+    "jsmith", "alopez", "mchen", "rnguyen", "dpatel", "skowalski",
+    "fmüller", "tlefevre", "crossi", "abolarin", "ykim", "bsantos",
+]
+NAMESPACES = ["prod", "prod-eu", "prod-us", "prod-apac", "prod-core", "prod-data"]
+SCHEMA_VERSIONS = [f"V{n}" for n in range(30, 80)]
+CANARY_RATES = [f"{r:.1f}" for r in [6.2, 7.8, 9.1, 11.3, 12.7, 14.0, 15.5, 18.2]]
+
+
+def _rand_ip() -> str:
+    return f"{random.randint(10,192)}.{random.randint(0,255)}.{random.randint(0,255)}.{random.randint(1,254)}"
+
+
+def _rand_subnet() -> str:
+    return f"10.{random.randint(0,9)}.{random.randint(0,50)}.0/24"
+
+
+def _rand_port() -> int:
+    return random.choice([80, 443, 8080, 8443, 3306, 5432, 6379, 9200])
+
+
+def _rand_vlan() -> int:
+    return random.choice([10, 20, 30, 50, 100, 200, 300])
+
+
+def _rand_pct(lo: int = 15, hi: int = 95) -> int:
+    return random.randint(lo, hi)
+
+
+TICKET_BUILDERS = {
     "network_issue": [
-        "Users reporting packet loss on corporate network. DNS resolution failing intermittently.",
-        "VPN connectivity dropped for remote workers. Firewall blocking outbound traffic on port 443.",
-        "High latency observed on backbone switch. Network degraded across floor 3.",
-        "DNS lookup failures affecting internal services. Routing table misconfiguration suspected.",
-        "Intermittent packet loss detected on WAN link. Throughput reduced by 60%.",
-        "Firewall rule blocking traffic between VLAN 10 and VLAN 20. Services unreachable.",
-        "Network switch failover not triggering. Redundant path unavailable.",
-        "BGP route propagation delay causing intermittent connectivity failures.",
-        "Users unable to reach external services. NAT translation failing on edge router.",
-        "Load balancer reporting upstream connection timeouts. Backend nodes unreachable.",
+        lambda c: f"Users on subnet {c['subnet']} reporting packet loss. DNS resolution failing for {c['service']}.",
+        lambda c: f"VPN connectivity dropped via {c['service']}. Firewall blocking outbound on port {c['port']}.",
+        lambda c: f"High latency on {c['service']}. Network degraded, RTT {random.randint(300,900)}ms to gateway {c['src_ip']}.",
+        lambda c: f"DNS lookup failures affecting {c['service']}. Routing misconfiguration suspected on {c['src_ip']}.",
+        lambda c: f"Intermittent packet loss on WAN link via {c['service']}. Throughput reduced by {_rand_pct(40,80)}%.",
+        lambda c: f"Firewall rule blocking traffic between VLAN {c['vlan']} and VLAN {c['vlan2']} via {c['service']}.",
+        lambda c: f"Failover not triggering on {c['service']}. Redundant path to {c['dst_ip']} unavailable.",
+        lambda c: f"BGP propagation delay on {c['service']} causing connectivity failures from {c['src_ip']}.",
+        lambda c: f"Users cannot reach {c['service']}. NAT translation failing on gateway {c['dst_ip']}.",
+        lambda c: f"Load balancer {c['service']} reporting upstream timeouts. Backend {c['dst_ip']} unreachable.",
     ],
     "authentication_failure": [
-        "Users unable to authenticate to VPN. Error: token validation failed.",
-        "SSO login broken for sales team. JWT expired errors in browser console.",
-        "Active Directory authentication failing for contractor accounts.",
-        "MFA push notifications not delivered. Users locked out of corporate apps.",
-        "OAuth2 token endpoint returning 401 for service accounts.",
-        "LDAP bind operation failing. Directory service returning connection refused.",
-        "Kerberos ticket renewal broken after patch deployment.",
-        "API gateway rejecting valid Bearer tokens. Auth service not responding.",
-        "User sessions expiring prematurely. Session store connectivity issue.",
-        "Password reset emails not sent. SMTP relay authentication rejected.",
+        lambda c: f"Users unable to authenticate via {c['service']}. Token validation failed for {c['user']}.",
+        lambda c: f"SSO login broken via {c['service']}. JWT expired errors for {c['user']} in browser console.",
+        lambda c: f"Active Directory auth failing via {c['service']} for user {c['user']}.",
+        lambda c: f"MFA push notifications not delivered via {c['service']}. User {c['user']} locked out.",
+        lambda c: f"OAuth2 token endpoint on {c['service']} returning 401 for account {c['user']}.",
+        lambda c: f"LDAP bind failing on {c['service']}. Directory returning connection refused for {c['user']}.",
+        lambda c: f"Kerberos ticket renewal broken on {c['service']} for user {c['user']} after patch.",
+        lambda c: f"API gateway {c['service']} rejecting Bearer tokens. Auth backend unreachable for {c['user']}.",
+        lambda c: f"Sessions expiring prematurely via {c['service']}. Session store issue affecting {c['user']}.",
+        lambda c: f"Password reset failed on {c['service']}. SMTP relay rejecting auth for {c['user']}.",
     ],
     "deployment_issue": [
-        "Production pod restarting repeatedly after latest release. OOM kill in logs.",
-        "Deployment rollback triggered for payments service. Health check failing.",
-        "Container image pull failing in prod namespace. Registry credentials expired.",
-        "Kubernetes node NotReady after node pool upgrade. Workloads evicted.",
-        "Helm chart deployment stuck in pending state. PVC not bound.",
-        "CI/CD pipeline failing at integration test stage after merge.",
-        "Blue/green switch failed. Old version still serving traffic after deployment.",
-        "Service mesh sidecar injection failing. Pods starting without Envoy proxy.",
-        "Database migration failed during deployment. Schema version mismatch.",
-        "Canary release showing elevated error rate. Automatic rollback not triggered.",
+        lambda c: f"Pod {c['service']} restarting after release in {c['ns']}. OOM kill in kubelet logs.",
+        lambda c: f"Deployment rollback triggered for {c['service']} in {c['ns']}. Health check failing.",
+        lambda c: f"Container image pull failing for {c['service']} in {c['ns']}. Registry credentials expired.",
+        lambda c: f"Kubernetes node NotReady after upgrade. Workloads for {c['service']} evicted in {c['ns']}.",
+        lambda c: f"Helm chart deployment of {c['service']} stuck in pending state in {c['ns']}. PVC not bound.",
+        lambda c: f"CI/CD pipeline failing at integration stage for {c['service']} after merge to {c['ns']}.",
+        lambda c: f"Blue/green switch failed for {c['service']} in {c['ns']}. Old version still serving traffic.",
+        lambda c: f"Sidecar injection failing for {c['service']} in {c['ns']}. Pods missing Envoy proxy.",
+        lambda c: f"Database migration {c['schema']} failed during {c['service']} deployment in {c['ns']}.",
+        lambda c: f"Canary {c['service']} in {c['ns']} shows {c['canary_rate']}% error rate. Rollback not triggered.",
     ],
 }
 
-LOG_TEMPLATES = {
+LOG_BUILDERS = {
     "network_issue": [
-        "ERROR network-agent PacketLossException: 34% packet loss on interface eth0 at {ts}",
-        "WARN dns-resolver DNSTimeoutError: resolution failed for internal.corp after 3 retries at {ts}",
-        "ERROR firewall-daemon RuleViolation: traffic blocked src=10.0.1.5 dst=10.0.2.1 port=443 at {ts}",
-        "CRITICAL routing-daemon RouteFlap: BGP session dropped with peer 192.168.1.1 at {ts}",
-        "ERROR switch-monitor HighLatency: round-trip time 850ms on backbone link at {ts}",
-        "WARN nat-gateway TranslationFail: SNAT pool exhausted, dropping connections at {ts}",
-        "ERROR load-balancer UpstreamTimeout: all backends unreachable for pool web-prod at {ts}",
-        "CRITICAL vpn-gateway TunnelDown: IPSec SA expired, re-keying failed at {ts}",
-        "ERROR dhcp-server PoolExhausted: no free leases in subnet 10.10.0.0/24 at {ts}",
-        "WARN spanning-tree TopologyChange: STP reconverging on VLAN 100 at {ts}",
+        lambda c, ts: f"ERROR {c['service']} PacketLossException: {_rand_pct(20,60)}% loss on {c['src_ip']} at {ts}",
+        lambda c, ts: f"WARN {c['service']} DNSTimeoutError: resolution failed for {c['dst_ip']} after 3 retries at {ts}",
+        lambda c, ts: f"ERROR {c['service']} RuleViolation: traffic blocked src={c['src_ip']} dst={c['dst_ip']} port={c['port']} at {ts}",
+        lambda c, ts: f"CRITICAL {c['service']} RouteFlap: BGP session dropped with peer {c['dst_ip']} at {ts}",
+        lambda c, ts: f"ERROR {c['service']} HighLatency: RTT {random.randint(400,900)}ms to {c['dst_ip']} at {ts}",
+        lambda c, ts: f"WARN {c['service']} TranslationFail: SNAT pool exhausted on subnet {c['subnet']} at {ts}",
+        lambda c, ts: f"ERROR {c['service']} UpstreamTimeout: backend {c['dst_ip']} unreachable at {ts}",
+        lambda c, ts: f"CRITICAL {c['service']} TunnelDown: IPSec SA expired for {c['src_ip']} at {ts}",
+        lambda c, ts: f"ERROR {c['service']} PoolExhausted: no free leases in {c['subnet']} at {ts}",
+        lambda c, ts: f"WARN {c['service']} TopologyChange: STP reconverging on VLAN {c['vlan']} at {ts}",
     ],
     "authentication_failure": [
-        "ERROR auth-service TokenValidationException: JWT expired at {ts}",
-        "ERROR sso-provider OAuthError: invalid_grant for client_id=webapp-prod at {ts}",
-        "CRITICAL ldap-client BindFailure: LDAP server returned error 49 invalid credentials at {ts}",
-        "ERROR kerberos-agent TGTRenewalFailed: KDC unreachable for realm CORP.LOCAL at {ts}",
-        "WARN mfa-service PushTimeout: push notification undelivered for user jdoe after 30s at {ts}",
-        "ERROR api-gateway AuthRejected: Bearer token signature mismatch for /api/v2/orders at {ts}",
-        "CRITICAL session-store ConnectionRefused: Redis auth backend unreachable at {ts}",
-        "ERROR ad-connector QueryTimeout: Active Directory LDAP query timed out after 5000ms at {ts}",
-        "WARN oauth-server RateLimited: token endpoint requests exceeded 1000/min at {ts}",
-        "ERROR saml-proxy AssertionExpired: SAML response timestamp out of allowed skew at {ts}",
+        lambda c, ts: f"ERROR {c['service']} TokenValidationException: JWT expired for user {c['user']} at {ts}",
+        lambda c, ts: f"ERROR {c['service']} OAuthError: invalid_grant for {c['user']} at {ts}",
+        lambda c, ts: f"CRITICAL {c['service']} BindFailure: LDAP error 49 invalid credentials for {c['user']} at {ts}",
+        lambda c, ts: f"ERROR {c['service']} TGTRenewalFailed: KDC unreachable for {c['user']} at {ts}",
+        lambda c, ts: f"WARN {c['service']} PushTimeout: MFA push undelivered to {c['user']} after 30s at {ts}",
+        lambda c, ts: f"ERROR {c['service']} AuthRejected: Bearer token mismatch for {c['user']} at {ts}",
+        lambda c, ts: f"CRITICAL {c['service']} ConnectionRefused: Redis auth backend unreachable for {c['user']} at {ts}",
+        lambda c, ts: f"ERROR {c['service']} QueryTimeout: AD LDAP query timed out for {c['user']} at {ts}",
+        lambda c, ts: f"WARN {c['service']} RateLimited: token endpoint flooded by requests for {c['user']} at {ts}",
+        lambda c, ts: f"ERROR {c['service']} AssertionExpired: SAML response out of skew for {c['user']} at {ts}",
     ],
     "deployment_issue": [
-        "CRITICAL kubelet OOMKilled: container payments-api killed, limit 512Mi exceeded at {ts}",
-        "ERROR helm-controller DeployFailed: rollout of payments-service v2.3.1 failed at {ts}",
-        "ERROR containerd ImagePullBackOff: registry.corp.local/api:latest unauthorized at {ts}",
-        "CRITICAL node-controller NodeNotReady: node prod-worker-3 failed health check at {ts}",
-        "ERROR pvc-controller VolumeBindTimeout: PersistentVolumeClaim data-pvc unbound for 300s at {ts}",
-        "WARN ci-runner TestFailure: integration tests failed at step db-migration-check at {ts}",
-        "ERROR traffic-manager SwitchFailed: blue/green switch aborted, readiness probe failing at {ts}",
-        "ERROR istio-injector SidecarFailed: Envoy proxy injection rejected for namespace prod at {ts}",
-        "CRITICAL flyway MigrationFailed: schema version V43 failed on prod database at {ts}",
-        "ERROR argo-rollouts CanaryFailed: error rate 12.3% exceeds threshold 5% for canary at {ts}",
+        lambda c, ts: f"CRITICAL kubelet OOMKilled: container {c['service']} killed in {c['ns']} at {ts}",
+        lambda c, ts: f"ERROR helm-controller DeployFailed: rollout of {c['service']} failed in {c['ns']} at {ts}",
+        lambda c, ts: f"ERROR containerd ImagePullBackOff: {c['service']}:latest unauthorized in {c['ns']} at {ts}",
+        lambda c, ts: f"CRITICAL node-controller NodeNotReady: node hosting {c['service']} failed check at {ts}",
+        lambda c, ts: f"ERROR pvc-controller VolumeBindTimeout: PVC for {c['service']} unbound in {c['ns']} at {ts}",
+        lambda c, ts: f"WARN ci-runner TestFailure: integration tests failed for {c['service']} in {c['ns']} at {ts}",
+        lambda c, ts: f"ERROR traffic-manager SwitchFailed: blue/green aborted for {c['service']} in {c['ns']} at {ts}",
+        lambda c, ts: f"ERROR istio-injector SidecarFailed: Envoy injection rejected for {c['service']} in {c['ns']} at {ts}",
+        lambda c, ts: f"CRITICAL flyway MigrationFailed: schema {c['schema']} failed for {c['service']} at {ts}",
+        lambda c, ts: f"ERROR argo-rollouts CanaryFailed: {c['canary_rate']}% errors for {c['service']} in {c['ns']} at {ts}",
     ],
 }
 
-ALERT_TEMPLATES = {
+ALERT_BUILDERS = {
     "network_issue": [
-        "ALERT: packet_loss_rate exceeded threshold 5% → {val}% over 10min window",
-        "ALERT: dns_resolution_failures exceeded threshold 10/min → {val}/min sustained",
-        "ALERT: network_latency_ms p99 exceeded 200ms → {val}ms on backbone link",
-        "ALERT: firewall_drop_rate exceeded threshold 1% → {val}% of traffic blocked",
-        "ALERT: bgp_session_count below threshold 2 → {val} active sessions detected",
-        "ALERT: wan_throughput_mbps dropped below 500Mbps → {val}Mbps current",
-        "ALERT: vpn_tunnel_stability below 99% → {val}% uptime over last 15min",
-        "ALERT: load_balancer_5xx_rate exceeded 1% → {val}% errors from upstream",
-        "ALERT: nat_translation_failure_rate exceeded 0.1% → {val}% of connections failing",
-        "ALERT: dhcp_lease_utilization exceeded 90% → {val}% pool used",
+        lambda c: f"ALERT: packet_loss_rate on {c['service']} exceeded threshold 5% -> {_rand_pct()}% over 10min",
+        lambda c: f"ALERT: dns_failures on {c['service']} exceeded 10/min -> {_rand_pct(11,80)}/min sustained",
+        lambda c: f"ALERT: network_latency_ms on {c['service']} p99 exceeded 200ms -> {_rand_pct(201,900)}ms",
+        lambda c: f"ALERT: firewall_drop_rate on {c['service']} exceeded 1% -> {_rand_pct(2,30)}% blocked",
+        lambda c: f"ALERT: bgp_sessions on {c['service']} below threshold 2 -> {random.randint(0,1)} active",
+        lambda c: f"ALERT: wan_throughput on {c['service']} dropped below 500Mbps -> {_rand_pct(10,490)}Mbps",
+        lambda c: f"ALERT: vpn_stability on {c['service']} below 99% -> {_rand_pct(60,98)}% uptime",
+        lambda c: f"ALERT: lb_5xx_rate on {c['service']} exceeded 1% -> {_rand_pct(2,40)}% upstream errors",
+        lambda c: f"ALERT: nat_failures on {c['service']} exceeded 0.1% -> {_rand_pct(1,15)}% failing",
+        lambda c: f"ALERT: dhcp_utilization on {c['service']} exceeded 90% -> {_rand_pct(91,99)}% pool used",
     ],
     "authentication_failure": [
-        "ALERT: auth_error_rate exceeded threshold 5% → {val}% over 10min window",
-        "ALERT: jwt_validation_failures exceeded 50/min → {val}/min current rate",
-        "ALERT: sso_login_failure_rate exceeded 10% → {val}% of attempts failing",
-        "ALERT: ldap_query_timeout_rate exceeded 1% → {val}% of queries timing out",
-        "ALERT: mfa_push_failure_rate exceeded 5% → {val}% of pushes undelivered",
-        "ALERT: api_401_rate exceeded threshold 2% → {val}% of API calls unauthorized",
-        "ALERT: session_expiry_rate exceeded 20/min → {val}/min premature expirations",
-        "ALERT: kerberos_ticket_renewal_failures exceeded 10/min → {val}/min failures",
-        "ALERT: oauth_token_endpoint_latency p95 exceeded 500ms → {val}ms current",
-        "ALERT: active_directory_bind_failures exceeded 5/min → {val}/min detected",
+        lambda c: f"ALERT: auth_error_rate on {c['service']} exceeded 5% -> {_rand_pct(6,40)}% over 10min",
+        lambda c: f"ALERT: jwt_failures on {c['service']} exceeded 50/min -> {_rand_pct(51,200)}/min",
+        lambda c: f"ALERT: sso_failure_rate on {c['service']} exceeded 10% -> {_rand_pct(11,60)}% failing",
+        lambda c: f"ALERT: ldap_timeout_rate on {c['service']} exceeded 1% -> {_rand_pct(2,30)}% timing out",
+        lambda c: f"ALERT: mfa_push_failures on {c['service']} exceeded 5% -> {_rand_pct(6,40)}% undelivered",
+        lambda c: f"ALERT: api_401_rate on {c['service']} exceeded 2% -> {_rand_pct(3,30)}% unauthorized",
+        lambda c: f"ALERT: session_expiry on {c['service']} exceeded 20/min -> {_rand_pct(21,100)}/min",
+        lambda c: f"ALERT: kerberos_failures on {c['service']} exceeded 10/min -> {_rand_pct(11,60)}/min",
+        lambda c: f"ALERT: oauth_latency_p95 on {c['service']} exceeded 500ms -> {_rand_pct(501,2000)}ms",
+        lambda c: f"ALERT: ad_bind_failures on {c['service']} exceeded 5/min -> {_rand_pct(6,40)}/min",
     ],
     "deployment_issue": [
-        "ALERT: pod_restart_count exceeded threshold 3 → {val} restarts in 10min",
-        "ALERT: deployment_rollback triggered for payments-service — health check failing",
-        "ALERT: container_oom_kill_rate exceeded 0 → {val} OOM kills in last 5min",
-        "ALERT: node_not_ready_count exceeded 0 → {val} nodes in NotReady state",
-        "ALERT: pvc_unbound_duration exceeded 60s → {val}s waiting for volume bind",
-        "ALERT: ci_pipeline_failure_rate exceeded 20% → {val}% of recent runs failing",
-        "ALERT: canary_error_rate exceeded threshold 5% → {val}% on canary pods",
-        "ALERT: image_pull_failure_rate exceeded 0 → {val} failures in namespace prod",
-        "ALERT: migration_job_status = failed for flyway-prod-migration",
-        "ALERT: service_mesh_injection_failures exceeded 0 → {val} pods missing sidecar",
+        lambda c: f"ALERT: pod_restarts on {c['service']} exceeded 3 -> {_rand_pct(4,20)} restarts in {c['ns']}",
+        lambda c: f"ALERT: deployment_rollback triggered for {c['service']} in {c['ns']} — health check failing",
+        lambda c: f"ALERT: oom_kills on {c['service']} exceeded 0 -> {_rand_pct(1,10)} kills in {c['ns']}",
+        lambda c: f"ALERT: nodes_not_ready hosting {c['service']} -> {random.randint(1,3)} nodes in NotReady in {c['ns']}",
+        lambda c: f"ALERT: pvc_unbound for {c['service']} in {c['ns']} -> {_rand_pct(61,300)}s waiting",
+        lambda c: f"ALERT: ci_failure_rate for {c['service']} exceeded 20% -> {_rand_pct(21,80)}% failing",
+        lambda c: f"ALERT: canary_error_rate on {c['service']} exceeded 5% -> {c['canary_rate']}% in {c['ns']}",
+        lambda c: f"ALERT: image_pull_failures for {c['service']} in {c['ns']} -> {_rand_pct(1,10)} failures",
+        lambda c: f"ALERT: migration_job {c['schema']} = failed for {c['service']} in {c['ns']}",
+        lambda c: f"ALERT: sidecar_injection_failures for {c['service']} exceeded 0 -> {_rand_pct(1,5)} missing in {c['ns']}",
     ],
 }
 
 PRIORITY_MAP = {
-    "network_issue": {
-        "ticket": "medium",
-        "log": "medium",
-        "alert": "high",
-    },
-    "authentication_failure": {
-        "ticket": "high",
-        "log": "high",
-        "alert": "high",
-    },
-    "deployment_issue": {
-        "ticket": "medium",
-        "log": "high",
-        "alert": "medium",
-    },
+    "network_issue": {"ticket": "medium", "log": "medium", "alert": "high"},
+    "authentication_failure": {"ticket": "high", "log": "high", "alert": "high"},
+    "deployment_issue": {"ticket": "medium", "log": "high", "alert": "medium"},
 }
 
 
@@ -157,9 +189,31 @@ def _derive_priority(text: str, source_type: str, label: str) -> str:
     return PRIORITY_MAP[label][source_type]
 
 
-def _fill_template(template: str, ts: datetime) -> str:
-    val = random.randint(15, 95)
-    return template.format(ts=ts.strftime("%Y-%m-%d %H:%M:%S"), val=val)
+def _group_context(label: str) -> dict:
+    if label == "network_issue":
+        vlan2 = random.choice([10, 20, 30, 50, 100, 200])
+        return {
+            "service": random.choice(SERVICES_NETWORK),
+            "src_ip": _rand_ip(),
+            "dst_ip": _rand_ip(),
+            "subnet": _rand_subnet(),
+            "port": _rand_port(),
+            "vlan": _rand_vlan(),
+            "vlan2": vlan2,
+        }
+    if label == "authentication_failure":
+        return {
+            "service": random.choice(SERVICES_AUTH),
+            "user": random.choice(USERS),
+            "src_ip": _rand_ip(),
+            "dst_ip": _rand_ip(),
+        }
+    return {
+        "service": random.choice(SERVICES_DEPLOY),
+        "ns": random.choice(NAMESPACES),
+        "schema": random.choice(SCHEMA_VERSIONS),
+        "canary_rate": random.choice(CANARY_RATES),
+    }
 
 
 def generate_incidents(n_groups_per_label: int = 50, random_state: int = RANDOM_STATE) -> pd.DataFrame:
@@ -167,34 +221,30 @@ def generate_incidents(n_groups_per_label: int = 50, random_state: int = RANDOM_
 
     base_time = datetime(2024, 1, 15, 0, 0, 0)
     labels = ["network_issue", "authentication_failure", "deployment_issue"]
-    source_types = ["ticket", "log", "alert"]
 
     rows = []
     incident_id = 0
     group_id = 0
 
     for label in labels:
-        ticket_pool = TICKET_TEMPLATES[label].copy()
-        log_pool = LOG_TEMPLATES[label].copy()
-        alert_pool = ALERT_TEMPLATES[label].copy()
+        n_builders = len(TICKET_BUILDERS[label])
 
         for group_idx in range(n_groups_per_label):
+            ctx = _group_context(label)
+            tmpl_idx = group_idx % n_builders
+
             group_base_ts = base_time + timedelta(
                 days=group_idx // 5,
                 hours=(group_idx % 5) * 4,
                 minutes=random.randint(0, 30),
             )
-
-            ticket_text = ticket_pool[group_idx % len(ticket_pool)]
             log_ts = group_base_ts + timedelta(minutes=random.randint(1, 15))
-            log_text = _fill_template(log_pool[group_idx % len(log_pool)], log_ts)
             alert_ts = group_base_ts + timedelta(minutes=random.randint(5, 30))
-            alert_text = _fill_template(alert_pool[group_idx % len(alert_pool)], alert_ts)
 
             sources = [
-                ("ticket", ticket_text, group_base_ts),
-                ("log", log_text, log_ts),
-                ("alert", alert_text, alert_ts),
+                ("ticket", TICKET_BUILDERS[label][tmpl_idx](ctx), group_base_ts),
+                ("log", LOG_BUILDERS[label][tmpl_idx](ctx, log_ts.strftime("%Y-%m-%d %H:%M:%S")), log_ts),
+                ("alert", ALERT_BUILDERS[label][tmpl_idx](ctx), alert_ts),
             ]
 
             for source_type, text, ts in sources:
