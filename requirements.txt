@@ -6,3 +6,4 @@ numpy>=1.23.0
 matplotlib==3.8.4
 seaborn==0.13.2
 joblib==1.4.0
+mlflow>=2.12.0
