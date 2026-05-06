@@ -1,0 +1,19 @@
+# MLflow
+mlruns/
+mlartifacts/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Data / model artifacts
+data/processed/
+models/
+*.pkl
+*.npy
+
+# Misc
+.env
+*.png
