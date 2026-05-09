@@ -14,30 +14,47 @@ RAW_DATA_PATH = Path(__file__).parents[2] / "data" / "raw" / "synthetic_incident
 def within_group_similarity(embeddings: np.ndarray, group_ids: np.ndarray) -> float:
     scores = []
     for gid in np.unique(group_ids):
+        #group_ids == gid compares every element in the array against the current group id, producing a boolean array:
+        #group_ids = [1, 1, 1, 2, 2, 2, 3, 3, 3]
+        #gid = 2
+        #mask =      [F, F, F, T, T, T, F, F, F]
         mask = group_ids == gid
+        #Then embeddings[mask] uses that boolean array to select only the rows where True - so getting just the 3 embeddings belonging to group 2
         group_embs = embeddings[mask]
         if group_embs.shape[0] < 2:
             continue
+        #Computes similarity between every pair - produces a 3×3 matrix:
         sims = cosine_similarity(group_embs)
         n = sims.shape[0]
+        #Takes only the upper triangle above the diagonal - that's the 3 unique pair scores
         upper = sims[np.triu_indices(n, k=1)]
+        #Averages the 3 pair scores for this group and saves it.
         scores.append(float(upper.mean()))
+    #Averages across all 50 groups — one final number representing how similar signals are within the same incident. Target: ≥ 0.85
     return float(np.mean(scores))
 
 
 def cross_label_similarity(embeddings: np.ndarray, labels: np.ndarray, n_pairs: int = 500) -> float:
+    #Random number generator with a fixed seed for reproducibility
     rng = np.random.default_rng(42)
     unique_labels = np.unique(labels)
     scores = []
     for _ in range(n_pairs):
+        #Picks 2 different label types, e.g. authentication_failure and network_issue
         l1, l2 = rng.choice(unique_labels, size=2, replace=False)
+        #Picks one random signal from each of those two classes.
         idx1 = rng.choice(np.where(labels == l1)[0])
         idx2 = rng.choice(np.where(labels == l2)[0])
+        #Computes similarity between those two signals. 
+        # .reshape(1, -1) is just a shape fix that cosine_similarity requires - it expects 2D arrays. 
+        # [0, 0] extracts the single number from the result.
         sim = float(cosine_similarity(
             embeddings[idx1].reshape(1, -1),
             embeddings[idx2].reshape(1, -1),
         )[0, 0])
         scores.append(sim)
+    #Averages all 500 pair scores - one final number representing how similar signals from different incident types are.
+    #If this is low (≤ 0.50) the model correctly sees authentication failures as very different from network issues.
     return float(np.mean(scores))
 
 
