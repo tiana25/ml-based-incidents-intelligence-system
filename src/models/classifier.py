@@ -23,7 +23,10 @@ def load_data() -> tuple[np.ndarray, np.ndarray, list[str]]:
     label_classes = sorted(df["label"].unique().tolist())
     return embeddings, labels, label_classes
 
-
+# x_train - 360 embeddings the model trains on
+# y_train - 360 correct labels for those embeddings
+# x_test - 90 embeddings the model has never seen
+# y_test - 90 correct labels used to check predictions against
 def train(
     embeddings: np.ndarray,
     labels: np.ndarray,
@@ -32,6 +35,9 @@ def train(
         embeddings, labels, test_size=0.2, stratify=labels, random_state=42
     )
     clf = LogisticRegression(max_iter=1000, C=1.0, random_state=42)
+    # It looks at each of the 360 embeddings in x_train alongside the correct answer in y_train and repeatedly adjusts its internal weights to minimise prediction errors.
+    # When the adjustments become negligibly small it stops - that's called converging.
+    # After this, clf knows which regions of the 768-dim embedding space correspond to which incident type.
     clf.fit(x_train, y_train)
     return clf, x_train, x_test, y_train, y_test
 
