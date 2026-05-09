@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug embed.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/features/embed.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Debug current file",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Debug classifier.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/models/classifier.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Debug eval_classifier.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/evaluation/eval_classifier.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
