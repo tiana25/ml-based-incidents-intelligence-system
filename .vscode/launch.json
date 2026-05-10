@@ -32,6 +32,16 @@
             "program": "${workspaceFolder}/src/evaluation/eval_classifier.py",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "Debug similarity.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/pipeline/similarity.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": { "PYTHONPATH": "${workspaceFolder}" },
+            "justMyCode": true
         }
     ]
 }
