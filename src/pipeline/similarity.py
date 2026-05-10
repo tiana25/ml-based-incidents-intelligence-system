@@ -47,52 +47,39 @@ def correlate(
     if not idx:
         return {"cluster_id": None, "related_ids": [], "max_similarity": 0.0}
 
+    # Take all incidents, subtract this incident's timestamp from each one, take the absolute difference, keep only the ones within 3600 seconds (1 hour).
     within_window = all_incidents[
         (all_incidents["timestamp"].apply(pd.Timestamp) - timestamp).abs()
         <= pd.Timedelta(seconds=time_window)
     ]
+    # Just pull out the id column of those filtered rows as a plain list.
     candidate_ids = within_window["id"].tolist()
+    # isin creates a True/False mask — True for rows whose ID is in the candidate list.
     candidate_mask = all_incidents["id"].isin(candidate_ids).values
+    # Using that mask to grab only those rows from the embeddings array.
     candidate_embeddings = all_embeddings[candidate_mask]
     candidate_ids_list = within_window["id"].tolist()
 
+    # Compare this incident's embedding against all candidates, return the ones above 0.80.
     matches = find_similar(embedding, candidate_embeddings, candidate_ids_list, threshold)
+    # The incident will always match itself with similarity 1.0 - filter it out.
     matches = [m for m in matches if m["id"] != incident_id]
 
     if not matches:
         return {"cluster_id": None, "related_ids": [], "max_similarity": 0.0}
 
+    # Look up which DBSCAN cluster this incident was assigned to. If it's -1 (noise/singleton), set it to None.
     cluster_id = int(cluster_assignments[all_incidents["id"] == incident_id].values[0])
     if cluster_id == -1:
         cluster_id = None
 
+    # Return the cluster ID, the list of related incident IDs, and the highest similarity score found.
     return {
         "cluster_id": cluster_id,
         "related_ids": [m["id"] for m in matches],
         "max_similarity": float(max(m["similarity"] for m in matches)),
     }
 
-# group all incidents into clusters in one batch
-# DBSCAN is a clustering algorithm
-# eps=0.20 is the max distance allowed between two neighbors (distance = 1 - similarity, so 0.20 = similarity of 0.80). Points with no neighbors become noise (-1).
-def run_dbscan(embeddings: np.ndarray) -> np.ndarray:
-    db = DBSCAN(eps=DBSCAN_EPS, min_samples=DBSCAN_MIN_SAMPLES, metric="cosine")
-    # runs the algorithm and returns an array of cluster labels, one per incident
-    # embeddings:     [emb_0, emb_1, emb_2, emb_3, emb_4, ...]   # 450 vectors
-    # cluster_labels: [   0,     0,     0,     -1,     1,  ...]   # 450 labels
-    # 0, 1, 2 ... → cluster IDs (incidents grouped together)
-    # -1 -> noise, incident didn't fit into any cluster
-    return db.fit_predict(embeddings)
-
-
-def _temporal_cosine_distance(a: np.ndarray, b: np.ndarray, time_window: float = TIME_WINDOW_SECONDS) -> float:
-    """Cosine distance that returns 2.0 (beyond any eps) when timestamps differ by more than time_window."""
-    if abs(a[0] - b[0]) > time_window:
-        return 2.0
-    cos_sim = float(np.dot(a[1:], b[1:]) / (np.linalg.norm(a[1:]) * np.linalg.norm(b[1:]) + 1e-10))
-    return 1.0 - cos_sim
-
-# same as run_dbscan but also checks timestamps
 def run_temporal_dbscan(
     embeddings: np.ndarray,
     timestamps: pd.Series,
@@ -178,6 +165,13 @@ if __name__ == "__main__":
     embeddings = np.load(EMBEDDINGS_PATH)
     df = pd.read_csv(RAW_DATA_PATH)
 
+    print("--- Debug: embedding uniqueness ---")
+    n_unique = np.unique(embeddings, axis=0).shape[0]
+    print(f"Total embeddings: {embeddings.shape[0]}  |  Unique embeddings: {n_unique}")
+    if n_unique < embeddings.shape[0]:
+        print("WARNING: duplicate embeddings detected — regenerate with src/features/embed.py")
+    print()
+
     print("--- Debug: find_similar ---")
     test_embedding = embeddings[0]
     recent_embeddings = embeddings[1:10]
@@ -206,7 +200,7 @@ if __name__ == "__main__":
     print()
 
     print("Running DBSCAN clustering...")
-    cluster_labels = run_dbscan(embeddings)
+    cluster_labels = run_temporal_dbscan(embeddings, df["timestamp"])
 
     n_clusters = len(set(cluster_labels)) - (1 if -1 in cluster_labels else 0)
     n_noise = int((cluster_labels == -1).sum())
