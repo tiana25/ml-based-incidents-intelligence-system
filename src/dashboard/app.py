@@ -15,7 +15,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.pipeline.classify import _embed, _load_models
 from src.pipeline.prioritize import score_priority
-from src.pipeline.similarity import build_fused_reports, find_similar, run_dbscan
+from src.pipeline.similarity import build_fused_reports, find_similar, run_temporal_dbscan
 
 EMBEDDINGS_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings.npy"
 RAW_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "synthetic_incidents.csv"
@@ -48,7 +48,7 @@ def load_dataset() -> tuple[np.ndarray, pd.DataFrame]:
 @st.cache_data(show_spinner="Running DBSCAN clustering...")
 def load_clusters(embeddings_hash: int) -> tuple[list[dict], np.ndarray]:
     embeddings, df = load_dataset()
-    cluster_labels = run_dbscan(embeddings)
+    cluster_labels = run_temporal_dbscan(embeddings, df["timestamp"])
     reports = build_fused_reports(df, embeddings, cluster_labels)
     return reports, cluster_labels
 
