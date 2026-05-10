@@ -42,6 +42,16 @@
             "cwd": "${workspaceFolder}",
             "env": { "PYTHONPATH": "${workspaceFolder}" },
             "justMyCode": true
+        },
+        {
+            "name": "Debug eval_similarity.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/evaluation/eval_similarity.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": { "PYTHONPATH": "${workspaceFolder}" },
+            "justMyCode": true
         }
     ]
 }
