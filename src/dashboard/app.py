@@ -18,6 +18,8 @@ from src.pipeline.prioritize import score_priority
 from src.pipeline.similarity import build_fused_reports, find_similar, run_temporal_dbscan
 
 EMBEDDINGS_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings.npy"
+EMBEDDINGS_BASE_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings_base.npy"
+EMBEDDINGS_FINETUNED_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings_finetuned.npy"
 RAW_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "synthetic_incidents.csv"
 FEEDBACK_PATH = PROJECT_ROOT / "data" / "feedback.jsonl"
 
@@ -39,15 +41,21 @@ def load_models():
 
 
 @st.cache_data(show_spinner="Loading dataset...")
-def load_dataset() -> tuple[np.ndarray, pd.DataFrame]:
-    embeddings = np.load(EMBEDDINGS_PATH)
+def load_dataset(use_finetuned: bool = False) -> tuple[np.ndarray, pd.DataFrame]:
+    if use_finetuned and EMBEDDINGS_FINETUNED_PATH.exists():
+        emb_path = EMBEDDINGS_FINETUNED_PATH
+    elif EMBEDDINGS_BASE_PATH.exists():
+        emb_path = EMBEDDINGS_BASE_PATH
+    else:
+        emb_path = EMBEDDINGS_PATH
+    embeddings = np.load(emb_path)
     df = pd.read_csv(RAW_DATA_PATH)
     return embeddings, df
 
 
 @st.cache_data(show_spinner="Running DBSCAN clustering...")
-def load_clusters(embeddings_hash: int) -> tuple[list[dict], np.ndarray]:
-    embeddings, df = load_dataset()
+def load_clusters(use_finetuned: bool = False) -> tuple[list[dict], np.ndarray]:
+    embeddings, df = load_dataset(use_finetuned=use_finetuned)
     cluster_labels = run_temporal_dbscan(embeddings, df["timestamp"])
     reports = build_fused_reports(df, embeddings, cluster_labels)
     return reports, cluster_labels
@@ -84,8 +92,8 @@ def load_feedback() -> pd.DataFrame:
 # Tabs
 # ---------------------------------------------------------------------------
 
-def render_correlation_tab(embeddings: np.ndarray, df: pd.DataFrame) -> None:
-    reports, cluster_labels = load_clusters(id(embeddings))
+def render_correlation_tab(embeddings: np.ndarray, df: pd.DataFrame, use_finetuned: bool = False) -> None:
+    reports, cluster_labels = load_clusters(use_finetuned=use_finetuned)
 
     if not reports:
         st.warning("No correlated clusters found. Try lowering the DBSCAN threshold.")
@@ -346,8 +354,31 @@ def main() -> None:
     st.title("ML-Based Incident Intelligence System")
     st.caption("Prototype · DistilBERT embeddings · Logistic Regression · DBSCAN correlation")
 
+    finetuned_available = EMBEDDINGS_FINETUNED_PATH.exists()
+
+    with st.sidebar:
+        st.header("Model")
+        model_options = ["Base DistilBERT (no fine-tuning)"]
+        if finetuned_available:
+            model_options.append("Fine-tuned DistilBERT")
+        else:
+            st.caption(
+                "Fine-tuned model not available yet. "
+                "Run `research/finetune_distilbert.ipynb` in Colab, "
+                "then `python src/features/embed.py --model finetuned`."
+            )
+
+        model_choice = st.radio("Embedding model", model_options, index=0)
+        use_finetuned = model_choice == "Fine-tuned DistilBERT"
+
+        if finetuned_available:
+            st.info(
+                "**Base** — no fine-tuning, time window does the clustering.\n\n"
+                "**Fine-tuned** — embeddings are discriminative; DBSCAN separates incident types by meaning."
+            )
+
     try:
-        embeddings, df = load_dataset()
+        embeddings, df = load_dataset(use_finetuned=use_finetuned)
     except FileNotFoundError as e:
         st.error(f"Missing data file: {e}. Run src/features/embed.py first.")
         return
@@ -359,7 +390,7 @@ def main() -> None:
     ])
 
     with tab1:
-        render_correlation_tab(embeddings, df)
+        render_correlation_tab(embeddings, df, use_finetuned=use_finetuned)
     with tab2:
         render_analyze_tab(embeddings, df)
     with tab3:
