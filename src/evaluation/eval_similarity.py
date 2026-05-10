@@ -33,7 +33,7 @@ def within_group_similarity(embeddings: np.ndarray, group_ids: np.ndarray) -> fl
     #Averages across all 50 groups — one final number representing how similar signals are within the same incident. Target: ≥ 0.85
     return float(np.mean(scores))
 
-
+# finds how similar are signals from different incident types to each other
 def cross_label_similarity(embeddings: np.ndarray, labels: np.ndarray, n_pairs: int = 500) -> float:
     #Random number generator with a fixed seed for reproducibility
     rng = np.random.default_rng(42)
