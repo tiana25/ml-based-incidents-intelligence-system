@@ -105,7 +105,7 @@ def render_correlation_tab(embeddings: np.ndarray, df: pd.DataFrame) -> None:
 
     cluster_options = {
         f"Cluster {r['cluster_id']}  |  {r['type'].replace('_', ' ')}  |  {r['priority'].upper()}  |  {r['signal_count']} signals": r["cluster_id"]
-        for r in sorted(reports, key=lambda x: (x["priority"] != "high", -x["confidence"]))
+        for r in sorted(reports, key=lambda x: x["cluster_id"])
     }
 
     selected_label = st.selectbox("Select incident cluster", list(cluster_options.keys()))
