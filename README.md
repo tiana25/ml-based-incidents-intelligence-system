@@ -20,52 +20,51 @@ These three signals describe the same incident. This system detects that.
 
 ## How it works - end to end
 
-```
-Multiple raw signals (tickets, logs, alerts)
-               │
-               ▼
-  ┌────────────────────────┐
-  │   Data Ingestion       │  src/data/generate.py
-  │   450 synthetic rows   │  (or real data in production)
-  └────────────┬───────────┘
-               │
-               ▼
-  ┌────────────────────────┐
-  │   Feature Extraction   │  src/features/embed.py
-  │   DistilBERT [CLS]     │  → 768-dim vector per signal
-  │   embeddings.npy       │
-  └────────────┬───────────┘
-               │
-       ┌───────┴────────┐
-       ▼                ▼
-  ┌─────────┐     ┌───────────┐
-  │Classify │     │ Prioritise│
-  │ incident│     │  (rules)  │
-  │  type   │     │ high/med/ │
-  │  (LR)   │     │   low     │
-  └────┬────┘     └─────┬─────┘
-       │                │
-       └───────┬─────────┘
-               │
-               ▼
-  ┌────────────────────────┐
-  │   Similarity &         │  src/pipeline/similarity.py
-  │   Correlation          │  cosine similarity + DBSCAN
-  │   cluster_id per signal│  + 60-min temporal gate
-  └────────────┬───────────┘
-               │
-               ▼
-  ┌────────────────────────┐
-  │   Fused Incident Report│
-  │   type · priority ·    │
-  │   sources · confidence │
-  └────────────┬───────────┘
-               │
-               ▼
-  ┌────────────────────────┐
-  │   Streamlit Dashboard  │  src/dashboard/app.py
-  │   + Analyst Feedback   │
-  └────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph TRAIN [Training — runs once]
+        direction TB
+        G1([generate.py]) --> CSV[(synthetic_incidents.csv)]
+        CSV --> EM([embed.py])
+        EM --> NPY[(embeddings.npy)]
+        EM --> LBL[(labels.npy)]
+        NPY --> CLS([classifier.py])
+        LBL --> CLS
+        CLS --> PKL[(classifier.pkl)]
+        CLS --> MLF1[[MLflow run: logistic-regression]]
+        NPY --> EVAL([eval_classifier.py])
+        PKL --> EVAL
+        EVAL --> MLF2[[MLflow run: evaluation]]
+        NPY --> EVALSIM([eval_similarity.py])
+        EVALSIM --> NMI[[NMI · cosine similarity report]]
+
+        subgraph COLAB [Optional · Google Colab T4]
+            FT([finetune_distilbert.ipynb]) --> FTW[(distilbert-finetuned/)]
+        end
+        FTW -.->|--model finetuned| EM
+    end
+
+    subgraph RUNTIME [Runtime — per request]
+        direction TB
+        IN([incident text\n+ source type])
+        IN --> CLASSIFY([classify.py])
+        IN --> PRIO([prioritize.py])
+        IN --> SIM([similarity.py])
+        CLASSIFY --> OUT1[type + confidence]
+        PRIO --> OUT2[priority + score]
+        SIM --> OUT3[similar incidents\n+ cluster]
+        OUT1 & OUT2 & OUT3 --> DASH([app.py · Streamlit])
+        DASH --> FB[(feedback.jsonl)]
+    end
+
+    PKL -->|loaded once, cached| CLASSIFY
+    NPY -->|cosine search| SIM
+
+    style COLAB fill:#f5f5f5,stroke:#bbb,stroke-dasharray:5
+    style MLF1 fill:#fff3cd,stroke:#e6ac00
+    style MLF2 fill:#fff3cd,stroke:#e6ac00
+    style NMI fill:#fff3cd,stroke:#e6ac00
+    style FB fill:#d4edda,stroke:#28a745
 ```
 
 ---
