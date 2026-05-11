@@ -1,0 +1,23 @@
+flowchart TD
+    INPUT([User input text\n+ source type]) --> CL([classify.py])
+    INPUT --> PR([prioritize.py])
+    INPUT --> SIM([similarity.py])
+
+    DISTIL[(distilbert-base-uncased\nor distilbert-finetuned)] -->|embed text → 768-dim vector| CL
+    PKL[(classifier.pkl)] --> CL
+    EMB[(embeddings.npy\n450 stored vectors)] --> SIM
+
+    CL --> R1[incident type\n+ confidence score]
+    PR --> R2[priority: high / medium / low\n+ keyword score]
+    SIM --> R3[top-8 similar incidents\n+ DBSCAN cluster assignment]
+
+    R1 --> APP([app.py · Streamlit])
+    R2 --> APP
+    R3 --> APP
+
+    APP --> T1[Tab 1\nCorrelation Dashboard]
+    APP --> T2[Tab 2\nAnalyze Incident]
+    APP --> T3[Tab 3\nDataset]
+    APP --> T4[Tab 4\nFeedback Log]
+
+    T1 -->|accept / reject| FB[(feedback.jsonl)]

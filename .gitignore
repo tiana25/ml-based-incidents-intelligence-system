@@ -16,7 +16,6 @@ models/
 
 # Misc
 .env
-*.png
 
 # Feedback jsonl file
 data/feedback.jsonl
