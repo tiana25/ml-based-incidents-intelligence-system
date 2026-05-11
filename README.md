@@ -290,5 +290,5 @@ First run downloads `distilbert-base-uncased` from HuggingFace (~250 MB, cached 
 
 ## Going deeper
 
-- **Step-by-step pipeline walkthrough, fine-tuning instructions, dashboard usage, known limitations and how they were addressed:** [prototype.md](prototype.md)
-- **Design decisions, lessons learned, and potential improvements:** [decisions-lessons.md](decisions-lessons.md)
+- **Step-by-step pipeline walkthrough, fine-tuning instructions, dashboard usage, known limitations and how they were addressed:** [prototype.md](docs/prototype.md)
+- **Design decisions, lessons learned, and potential improvements:** [decisions-lessons.md](docs/decisions-lessons.md)
