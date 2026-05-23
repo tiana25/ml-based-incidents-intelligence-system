@@ -91,7 +91,8 @@ if __name__ == "__main__":
     encoded_labels, label_classes = encode_labels(df["label"])
 
     np.save(output_path, embeddings)
-    np.save(EMBEDDINGS_PATH, embeddings)
+    if output_path == EMBEDDINGS_BASE_PATH:
+        np.save(EMBEDDINGS_PATH, embeddings)
     np.save(LABELS_PATH, encoded_labels)
 
     print(f"Embeddings shape: {embeddings.shape}")
