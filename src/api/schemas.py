@@ -47,5 +47,22 @@ class ClusterReport(BaseModel):
     incident_ids: list[int]
 
 
+class IngestRequest(BaseModel):
+    text: str
+    source_type: str
+    timestamp: Optional[str] = None
+
+
+class IngestResponse(BaseModel):
+    id: int
+    label: str
+    confidence: float
+    priority: str
+    cluster_id: Optional[int]
+    related_ids: list[int]
+
+
 class HealthResponse(BaseModel):
     status: str
+    total_signals: int
+    total_clusters: int

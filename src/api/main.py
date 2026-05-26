@@ -1,5 +1,6 @@
 import sys
 from contextlib import asynccontextmanager
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
@@ -17,6 +18,8 @@ from src.api.schemas import (
     CorrelateRequest,
     CorrelateResponse,
     HealthResponse,
+    IngestRequest,
+    IngestResponse,
     PrioritizeRequest,
     PrioritizeResponse,
     SimilarMatch,
@@ -31,6 +34,13 @@ RAW_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "synthetic_incidents.csv"
 _state: dict[str, Any] = {}
 
 
+def _recluster() -> None:
+    cluster_labels = run_temporal_dbscan(_state["embeddings"], _state["df"]["timestamp"])
+    reports = build_fused_reports(_state["df"], _state["embeddings"], cluster_labels)
+    _state["cluster_labels"] = cluster_labels
+    _state["reports"] = reports
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if not EMBEDDINGS_PATH.exists() or not RAW_DATA_PATH.exists():
@@ -39,18 +49,10 @@ async def lifespan(app: FastAPI):
             f"  embeddings: {EMBEDDINGS_PATH}\n"
             f"  dataset:    {RAW_DATA_PATH}"
         )
-    embeddings = np.load(EMBEDDINGS_PATH)
-    df = pd.read_csv(RAW_DATA_PATH)
-    cluster_labels = run_temporal_dbscan(embeddings, df["timestamp"])
-    reports = build_fused_reports(df, embeddings, cluster_labels)
-
-    _state["embeddings"] = embeddings
-    _state["df"] = df
-    _state["cluster_labels"] = cluster_labels
-    _state["reports"] = reports
-
+    _state["embeddings"] = np.load(EMBEDDINGS_PATH)
+    _state["df"] = pd.read_csv(RAW_DATA_PATH)
+    _recluster()
     yield
-
     _state.clear()
 
 
@@ -64,7 +66,11 @@ app = FastAPI(
 
 @app.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
-    return HealthResponse(status="ok")
+    return HealthResponse(
+        status="ok",
+        total_signals=len(_state["df"]),
+        total_clusters=len(_state["reports"]),
+    )
 
 
 @app.post("/classify", response_model=ClassifyResponse)
@@ -93,8 +99,7 @@ def correlate(request: CorrelateRequest) -> CorrelateResponse:
     cluster_labels: np.ndarray = _state["cluster_labels"]
 
     embedding = _embed(request.text)
-    all_ids = df["id"].tolist()
-    matches = find_similar(embedding, embeddings, all_ids, threshold=request.threshold)
+    matches = find_similar(embedding, embeddings, df["id"].tolist(), threshold=request.threshold)
 
     cluster_id: Optional[int] = None
     if matches:
@@ -105,6 +110,60 @@ def correlate(request: CorrelateRequest) -> CorrelateResponse:
     return CorrelateResponse(
         related=[SimilarMatch(id=m["id"], similarity=m["similarity"]) for m in matches],
         cluster_id=cluster_id,
+    )
+
+
+@app.post("/ingest", response_model=IngestResponse)
+def ingest(request: IngestRequest) -> IngestResponse:
+    if not request.text.strip():
+        raise HTTPException(status_code=422, detail="text must not be empty")
+
+    df: pd.DataFrame = _state["df"]
+    embeddings: np.ndarray = _state["embeddings"]
+
+    timestamp = request.timestamp or datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    new_id = int(df["id"].max()) + 1
+
+    classification = classify_incident(request.text)
+    priority_result = score_priority(request.text, request.source_type)
+
+    new_embedding = _embed(request.text)
+
+    new_row = pd.DataFrame([{
+        "id": new_id,
+        "incident_group_id": -1,
+        "source_type": request.source_type,
+        "text": request.text,
+        "label": classification["label"],
+        "priority": priority_result["priority"],
+        "timestamp": timestamp,
+    }])
+
+    _state["df"] = pd.concat([df, new_row], ignore_index=True)
+    _state["embeddings"] = np.vstack([embeddings, new_embedding])
+
+    _recluster()
+
+    cluster_labels: np.ndarray = _state["cluster_labels"]
+    updated_df: pd.DataFrame = _state["df"]
+
+    raw_cluster = int(cluster_labels[updated_df["id"] == new_id].values[0])
+    cluster_id: Optional[int] = raw_cluster if raw_cluster != -1 else None
+
+    related_ids: list[int] = []
+    if cluster_id is not None:
+        reports = _state["reports"]
+        report = next((r for r in reports if r["cluster_id"] == cluster_id), None)
+        if report:
+            related_ids = [i for i in report["incident_ids"] if i != new_id]
+
+    return IngestResponse(
+        id=new_id,
+        label=classification["label"],
+        confidence=classification["confidence"],
+        priority=priority_result["priority"],
+        cluster_id=cluster_id,
+        related_ids=related_ids,
     )
 
 
