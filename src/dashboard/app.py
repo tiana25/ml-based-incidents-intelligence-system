@@ -20,7 +20,12 @@ from src.pipeline.similarity import build_fused_reports, find_similar, run_tempo
 EMBEDDINGS_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings.npy"
 EMBEDDINGS_BASE_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings_base.npy"
 EMBEDDINGS_FINETUNED_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings_finetuned.npy"
+EMBEDDINGS_REALISTIC_BASE_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings_realistic_base.npy"
+EMBEDDINGS_REALISTIC_FINETUNED_PATH = PROJECT_ROOT / "data" / "processed" / "embeddings_realistic_finetuned.npy"
 RAW_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "synthetic_incidents.csv"
+REALISTIC_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "synthetic_incidents_realistic.csv"
+REALISTIC_BASE_MODEL_PATH = PROJECT_ROOT / "models" / "classifier_realistic_base.pkl"
+REALISTIC_FINETUNED_MODEL_PATH = PROJECT_ROOT / "models" / "classifier_realistic_finetuned.pkl"
 FEEDBACK_PATH = PROJECT_ROOT / "data" / "feedback.jsonl"
 
 PRIORITY_COLOR = {"high": "#e74c3c", "medium": "#e67e22", "low": "#27ae60"}
@@ -28,6 +33,8 @@ LABEL_COLOR = {
     "authentication_failure": "#3498db",
     "deployment_issue": "#9b59b6",
     "network_issue": "#e67e22",
+    "database_failure": "#e74c3c",
+    "certificate_expiry": "#1abc9c",
 }
 
 
@@ -41,21 +48,24 @@ def load_models():
 
 
 @st.cache_data(show_spinner="Loading dataset...")
-def load_dataset(use_finetuned: bool = False) -> tuple[np.ndarray, pd.DataFrame]:
-    if use_finetuned and EMBEDDINGS_FINETUNED_PATH.exists():
+def load_dataset(model_choice: str = "base") -> tuple[np.ndarray, pd.DataFrame]:
+    if model_choice == "finetuned-realistic":
+        emb_path = EMBEDDINGS_REALISTIC_FINETUNED_PATH
+        data_path = REALISTIC_DATA_PATH
+    elif model_choice == "finetuned" and EMBEDDINGS_FINETUNED_PATH.exists():
         emb_path = EMBEDDINGS_FINETUNED_PATH
-    elif EMBEDDINGS_BASE_PATH.exists():
-        emb_path = EMBEDDINGS_BASE_PATH
+        data_path = RAW_DATA_PATH
     else:
-        emb_path = EMBEDDINGS_PATH
+        emb_path = EMBEDDINGS_BASE_PATH if EMBEDDINGS_BASE_PATH.exists() else EMBEDDINGS_PATH
+        data_path = RAW_DATA_PATH
     embeddings = np.load(emb_path)
-    df = pd.read_csv(RAW_DATA_PATH)
+    df = pd.read_csv(data_path)
     return embeddings, df
 
 
 @st.cache_data(show_spinner="Running DBSCAN clustering...")
-def load_clusters(use_finetuned: bool = False) -> tuple[list[dict], np.ndarray]:
-    embeddings, df = load_dataset(use_finetuned=use_finetuned)
+def load_clusters(model_choice: str = "base") -> tuple[list[dict], np.ndarray]:
+    embeddings, df = load_dataset(model_choice=model_choice)
     cluster_labels = run_temporal_dbscan(embeddings, df["timestamp"])
     reports = build_fused_reports(df, embeddings, cluster_labels)
     return reports, cluster_labels
@@ -92,8 +102,8 @@ def load_feedback() -> pd.DataFrame:
 # Tabs
 # ---------------------------------------------------------------------------
 
-def render_correlation_tab(embeddings: np.ndarray, df: pd.DataFrame, use_finetuned: bool = False) -> None:
-    reports, cluster_labels = load_clusters(use_finetuned=use_finetuned)
+def render_correlation_tab(embeddings: np.ndarray, df: pd.DataFrame, model_choice: str = "base") -> None:
+    reports, cluster_labels = load_clusters(model_choice=model_choice)
 
     if not reports:
         st.warning("No correlated clusters found. Try lowering the DBSCAN threshold.")
@@ -320,6 +330,193 @@ def render_dataset_tab(df: pd.DataFrame) -> None:
     )
 
 
+def render_realistic_tab(model_choice: str = "base") -> None:
+    st.subheader("Realistic Dataset Study")
+    st.caption("5-category imbalanced dataset · variable signal coverage per incident group")
+
+    if model_choice != "finetuned-realistic":
+        st.info(
+            "This tab shows the analysis for the **Fine-tuned Realistic DistilBERT** model. "
+            "Select **Fine-tuned Realistic DistilBERT** in the sidebar to view the full results."
+        )
+        return
+
+    emb_path = EMBEDDINGS_REALISTIC_FINETUNED_PATH
+    clf_path = REALISTIC_FINETUNED_MODEL_PATH
+
+    artifacts_missing = not REALISTIC_DATA_PATH.exists() or not clf_path.exists() or not emb_path.exists()
+
+    if artifacts_missing:
+        missing = []
+        if not REALISTIC_DATA_PATH.exists():
+            missing.append(f"`{REALISTIC_DATA_PATH.relative_to(PROJECT_ROOT)}`")
+        if not emb_path.exists():
+            missing.append(f"`{emb_path.relative_to(PROJECT_ROOT)}`")
+        if not clf_path.exists():
+            missing.append(f"`{clf_path.relative_to(PROJECT_ROOT)}`")
+
+        st.warning(f"Missing artifacts: {', '.join(missing)}")
+        st.code(
+            "# Upload synthetic_incidents_realistic.csv to research/finetune_distilbert.ipynb in Colab\n"
+            "# Download and extract the fine-tuned model to models/distilbert-finetuned-realistic/\n"
+            "python src/features/embed.py --model finetuned-realistic\n"
+            "python src/models/classifier.py "
+            "--embeddings-path data/processed/embeddings_realistic_finetuned.npy "
+            "--data-path data/raw/synthetic_incidents_realistic.csv "
+            "--output-path models/classifier_realistic_finetuned.pkl",
+            language="bash",
+        )
+        return
+
+    import joblib
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.model_selection import train_test_split
+
+    df_real = pd.read_csv(REALISTIC_DATA_PATH)
+    df_orig = pd.read_csv(RAW_DATA_PATH)
+    embeddings_real = np.load(emb_path)
+    clf_real = joblib.load(clf_path)
+
+    label_classes_real = sorted(df_real["label"].unique().tolist())
+    label_to_idx = {label: idx for idx, label in enumerate(label_classes_real)}
+    y_real = df_real["label"].map(label_to_idx).to_numpy()
+    _, x_test, _, y_test = train_test_split(
+        embeddings_real, y_real, test_size=0.2, stratify=y_real, random_state=42
+    )
+    y_pred = clf_real.predict(x_test)
+
+    # --- Section 1: Dataset overview ---
+    st.markdown("### Dataset overview")
+    col_dist, col_coverage = st.columns(2)
+
+    with col_dist:
+        orig_counts = df_orig["label"].value_counts().reset_index()
+        orig_counts.columns = ["label", "count"]
+        orig_counts["dataset"] = "Balanced (original)"
+
+        real_counts = df_real["label"].value_counts().reset_index()
+        real_counts.columns = ["label", "count"]
+        real_counts["dataset"] = "Realistic (5-class)"
+
+        combined = pd.concat([orig_counts, real_counts], ignore_index=True)
+        fig = px.bar(
+            combined, x="label", y="count", color="dataset", barmode="group",
+            title="Class distribution: original vs realistic",
+            color_discrete_sequence=["#3498db", "#e74c3c"],
+        )
+        fig.update_layout(xaxis_tickangle=-20, xaxis_title=None, legend_title_text=None)
+        st.plotly_chart(fig, use_container_width=True)
+
+    with col_coverage:
+        def source_count_per_group(df: pd.DataFrame) -> pd.DataFrame:
+            counts = df.groupby(["incident_group_id", "label"])["source_type"].count().reset_index()
+            counts.columns = ["incident_group_id", "label", "n_sources"]
+            counts["n_sources"] = counts["n_sources"].clip(upper=3).astype(str) + " source(s)"
+            return counts
+
+        coverage_df = source_count_per_group(df_real)
+        cov_summary = coverage_df.groupby(["label", "n_sources"]).size().reset_index(name="groups")
+        fig2 = px.bar(
+            cov_summary, x="label", y="groups", color="n_sources", barmode="stack",
+            title="Signal coverage per incident group",
+            color_discrete_sequence=["#27ae60", "#e67e22", "#e74c3c"],
+        )
+        fig2.update_layout(xaxis_tickangle=-20, xaxis_title=None, legend_title_text="Sources per group")
+        st.plotly_chart(fig2, use_container_width=True)
+
+    st.markdown("---")
+
+    # --- Section 2: Classification metrics ---
+    st.markdown("### Classification metrics")
+    report = classification_report(y_test, y_pred, target_names=label_classes_real, output_dict=True)
+
+    metric_rows = []
+    for label in label_classes_real:
+        row = report[label]
+        metric_rows.append({
+            "Class": label.replace("_", " "),
+            "Precision": f"{row['precision']:.2f}",
+            "Recall": f"{row['recall']:.2f}",
+            "F1": f"{row['f1-score']:.2f}",
+            "Support": int(row["support"]),
+        })
+    metric_rows.append({
+        "Class": "weighted avg",
+        "Precision": f"{report['weighted avg']['precision']:.2f}",
+        "Recall": f"{report['weighted avg']['recall']:.2f}",
+        "F1": f"{report['weighted avg']['f1-score']:.2f}",
+        "Support": int(report['weighted avg']['support']),
+    })
+
+    acc = report["accuracy"]
+    st.metric("Test accuracy", f"{acc:.1%}")
+    st.dataframe(pd.DataFrame(metric_rows), use_container_width=True, hide_index=True)
+    st.caption(
+        "Note: `certificate_expiry` and `database_failure` share vocabulary with adjacent categories — "
+        "lower F1 on these classes is expected and reflects the genuine ambiguity in the data."
+    )
+
+    st.markdown("---")
+
+    # --- Section 3: Confusion matrix ---
+    st.markdown("### Confusion matrix")
+    cm = confusion_matrix(y_test, y_pred)
+    short_labels = [l.replace("_", " ") for l in label_classes_real]
+    fig_cm = px.imshow(
+        cm,
+        x=short_labels,
+        y=short_labels,
+        text_auto=True,
+        color_continuous_scale="Blues",
+        title="Predicted (x) vs Actual (y)",
+        aspect="auto",
+    )
+    fig_cm.update_layout(xaxis_title="Predicted", yaxis_title="Actual")
+    st.plotly_chart(fig_cm, use_container_width=True)
+    st.caption(
+        "Off-diagonal cells between certificate expiry / authentication failure "
+        "and database failure / network issue show deliberate semantic overlap in the templates."
+    )
+
+    st.markdown("---")
+
+    # --- Section 4: Embedding space (PCA) ---
+    st.markdown("### Embedding space (PCA)")
+
+    coverage_map = (
+        df_real.groupby("incident_group_id")["source_type"]
+        .count()
+        .rename("n_sources")
+    )
+    df_plot = df_real.copy()
+    df_plot["n_sources"] = df_plot["incident_group_id"].map(coverage_map)
+    df_plot["coverage"] = df_plot["n_sources"].map({1: "1 source", 2: "2 sources", 3: "3 sources"})
+
+    pca = PCA(n_components=2, random_state=42)
+    coords = pca.fit_transform(embeddings_real)
+    df_plot["x"] = coords[:, 0]
+    df_plot["y"] = coords[:, 1]
+
+    fig_pca = px.scatter(
+        df_plot, x="x", y="y",
+        color="label",
+        symbol="coverage",
+        color_discrete_map=LABEL_COLOR,
+        symbol_map={"1 source": "x", "2 sources": "diamond", "3 sources": "circle"},
+        hover_data=["id", "label", "source_type", "priority", "incident_group_id"],
+        opacity=0.75,
+        height=480,
+        title="Embedding space — colour = label, shape = signal coverage",
+    )
+    fig_pca.update_traces(marker_size=7)
+    fig_pca.update_layout(legend_title_text=None)
+    st.plotly_chart(fig_pca, use_container_width=True)
+    st.caption(
+        "Incidents with only 1 source (×) are naturally isolated in the embedding space — "
+        "DBSCAN will leave them unclustered (noise) without any special label."
+    )
+
+
 def render_feedback_tab() -> None:
     st.subheader("Analyst feedback log")
     df = load_feedback()
@@ -352,50 +549,53 @@ def main() -> None:
         layout="wide",
     )
     st.title("ML-Based Incident Intelligence System")
-    st.caption("Prototype · DistilBERT embeddings · Logistic Regression · DBSCAN correlation")
-
-    finetuned_available = EMBEDDINGS_FINETUNED_PATH.exists()
+    st.caption("Prototype · DistilBERT embeddings · Logistic Regression · DBSCAN correlation · v2")
 
     with st.sidebar:
         st.header("Model")
-        model_options = ["Base DistilBERT (no fine-tuning)"]
-        if finetuned_available:
+        model_options = ["Base DistilBERT"]
+        if EMBEDDINGS_FINETUNED_PATH.exists():
             model_options.append("Fine-tuned DistilBERT")
+        if EMBEDDINGS_REALISTIC_FINETUNED_PATH.exists():
+            model_options.append("Fine-tuned Realistic DistilBERT")
+
+        selected = st.radio("Embedding model", model_options, index=0)
+
+        if selected == "Fine-tuned Realistic DistilBERT":
+            model_choice = "finetuned-realistic"
+        elif selected == "Fine-tuned DistilBERT":
+            model_choice = "finetuned"
         else:
-            st.caption(
-                "Fine-tuned model not available yet. "
-                "Run `research/finetune_distilbert.ipynb` in Colab, "
-                "then `python src/features/embed.py --model finetuned`."
-            )
+            model_choice = "base"
 
-        model_choice = st.radio("Embedding model", model_options, index=0)
-        use_finetuned = model_choice == "Fine-tuned DistilBERT"
-
-        if finetuned_available:
-            st.info(
-                "**Base** — no fine-tuning, time window does the clustering.\n\n"
-                "**Fine-tuned** — embeddings are discriminative; DBSCAN separates incident types by meaning."
-            )
+        descriptions = {
+            "base": "No fine-tuning. Time window drives DBSCAN clustering. Original 3-class balanced dataset.",
+            "finetuned": "Fine-tuned on the original balanced dataset. Embeddings are discriminative — DBSCAN separates by meaning.",
+            "finetuned-realistic": "Fine-tuned on the 5-class imbalanced dataset with variable signal coverage. Correlation runs on realistic data.",
+        }
+        st.info(descriptions[model_choice])
 
     try:
-        embeddings, df = load_dataset(use_finetuned=use_finetuned)
+        embeddings, df = load_dataset(model_choice=model_choice)
     except FileNotFoundError as e:
         st.error(f"Missing data file: {e}. Run src/features/embed.py first.")
         return
 
     load_models()
 
-    tab1, tab2, tab3, tab4 = st.tabs([
-        "Correlation Dashboard", "Analyze Incident", "Dataset", "Feedback Log"
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "Correlation Dashboard", "Analyze Incident", "Dataset", "Realistic Dataset", "Feedback Log"
     ])
 
     with tab1:
-        render_correlation_tab(embeddings, df, use_finetuned=use_finetuned)
+        render_correlation_tab(embeddings, df, model_choice=model_choice)
     with tab2:
         render_analyze_tab(embeddings, df)
     with tab3:
         render_dataset_tab(df)
     with tab4:
+        render_realistic_tab(model_choice=model_choice)
+    with tab5:
         render_feedback_tab()
 
 

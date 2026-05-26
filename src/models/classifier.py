@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 
 import joblib
@@ -16,17 +17,18 @@ LABEL_CLASSES_PATH = Path(__file__).parents[2] / "models" / "label_classes.txt"
 MLFLOW_EXPERIMENT = "incident-classifier"
 
 
-def load_data() -> tuple[np.ndarray, np.ndarray, list[str]]:
-    embeddings = np.load(EMBEDDINGS_PATH)
-    labels = np.load(LABELS_PATH)
-    df = pd.read_csv(RAW_DATA_PATH)
+def load_data(
+    embeddings_path: Path = EMBEDDINGS_PATH,
+    data_path: Path = RAW_DATA_PATH,
+) -> tuple[np.ndarray, np.ndarray, list[str]]:
+    embeddings = np.load(embeddings_path)
+    df = pd.read_csv(data_path)
     label_classes = sorted(df["label"].unique().tolist())
+    label_to_idx = {label: idx for idx, label in enumerate(label_classes)}
+    labels = df["label"].map(label_to_idx).to_numpy()
     return embeddings, labels, label_classes
 
-# x_train - 360 embeddings the model trains on
-# y_train - 360 correct labels for those embeddings
-# x_test - 90 embeddings the model has never seen
-# y_test - 90 correct labels used to check predictions against
+
 def train(
     embeddings: np.ndarray,
     labels: np.ndarray,
@@ -35,17 +37,39 @@ def train(
         embeddings, labels, test_size=0.2, stratify=labels, random_state=42
     )
     clf = LogisticRegression(max_iter=1000, C=1.0, random_state=42)
-    # It looks at each of the 360 embeddings in x_train alongside the correct answer in y_train and repeatedly adjusts its internal weights to minimise prediction errors.
-    # When the adjustments become negligibly small it stops - that's called converging.
-    # After this, clf knows which regions of the 768-dim embedding space correspond to which incident type.
     clf.fit(x_train, y_train)
     return clf, x_train, x_test, y_train, y_test
 
 
 if __name__ == "__main__":
-    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    parser = argparse.ArgumentParser(description="Train logistic regression classifier on DistilBERT embeddings")
+    parser.add_argument(
+        "--embeddings-path",
+        type=Path,
+        default=None,
+        help="Path to .npy embeddings file. Defaults to data/processed/embeddings.npy.",
+    )
+    parser.add_argument(
+        "--data-path",
+        type=Path,
+        default=None,
+        help="Path to raw incidents CSV. Defaults to data/raw/synthetic_incidents.csv.",
+    )
+    parser.add_argument(
+        "--output-path",
+        type=Path,
+        default=None,
+        help="Path to save the trained classifier .pkl. Defaults to models/classifier.pkl.",
+    )
+    args = parser.parse_args()
 
-    embeddings, labels, label_classes = load_data()
+    embeddings_path = args.embeddings_path if args.embeddings_path is not None else EMBEDDINGS_PATH
+    data_path = args.data_path if args.data_path is not None else RAW_DATA_PATH
+    model_path = args.output_path if args.output_path is not None else MODEL_PATH
+
+    model_path.parent.mkdir(parents=True, exist_ok=True)
+
+    embeddings, labels, label_classes = load_data(embeddings_path, data_path)
     print(f"Embeddings: {embeddings.shape}, Labels: {labels.shape}")
 
     mlflow.set_experiment(MLFLOW_EXPERIMENT)
@@ -63,6 +87,8 @@ if __name__ == "__main__":
             "test_size": 0.2,
             "n_samples": len(labels),
             "n_classes": len(set(labels)),
+            "embeddings_path": str(embeddings_path),
+            "data_path": str(data_path),
         })
 
         clf, x_train, x_test, y_train, y_test = train(embeddings, labels)
@@ -76,14 +102,15 @@ if __name__ == "__main__":
 
         mlflow.sklearn.log_model(clf, name="classifier")
 
-        joblib.dump(clf, MODEL_PATH)
-        LABEL_CLASSES_PATH.write_text("\n".join(label_classes))
-        mlflow.log_artifact(str(MODEL_PATH), artifact_path="model_pkl")
+        joblib.dump(clf, model_path)
+        label_classes_path = model_path.parent / (model_path.stem + "_label_classes.txt")
+        label_classes_path.write_text("\n".join(label_classes))
+        mlflow.log_artifact(str(model_path), artifact_path="model_pkl")
 
         run_id = mlflow.active_run().info.run_id
         print(f"Training complete. Test set size: {len(y_test)}")
         print(f"Train accuracy: {train_acc:.4f}")
         print(f"Test accuracy:  {test_acc:.4f}")
-        print(f"Model saved -> {MODEL_PATH}")
+        print(f"Model saved -> {model_path}")
         print(f"Label classes: {label_classes}")
         print(f"MLflow run:    {run_id}")

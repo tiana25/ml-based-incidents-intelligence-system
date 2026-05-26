@@ -1,0 +1,696 @@
+id,incident_group_id,source_type,text,label,priority,timestamp
+0,151,log,WARN wan-gateway DNSTimeoutError: resolution failed for 168.151.126.183 after 3 retries at 2024-01-25 04:16:00,network_issue,high,2024-01-25 04:16:00
+1,266,log,"ERROR nginx-ingress TokenSigningFailed: RSA key cert expired, auth broken for auth.company.com at 2024-01-16 04:25:00",certificate_expiry,high,2024-01-16 04:25:00
+2,101,alert,ALERT: dns_failures on wan-gateway exceeded 10/min -> 53/min sustained,network_issue,high,2024-01-15 04:08:00
+3,135,alert,ALERT: wan_throughput on dns-resolver-prod dropped below 500Mbps -> 455Mbps,network_issue,high,2024-01-22 00:47:00
+4,128,ticket,Users cannot reach dns-resolver-prod. NAT translation failing on gateway 25.45.118.137.,network_issue,medium,2024-01-20 12:05:00
+5,84,log,WARN ldap-directory PushTimeout: MFA push undelivered to bsantos after 30s at 2024-01-31 16:29:00,authentication_failure,medium,2024-01-31 16:29:00
+6,146,alert,ALERT: vpn_stability on bgp-peer-isp1 below 99% -> 85% uptime,network_issue,high,2024-01-24 04:39:00
+7,69,alert,ALERT: ad_bind_failures on api-gateway exceeded 5/min -> 31/min,authentication_failure,high,2024-01-28 16:55:00
+8,134,ticket,Intermittent packet loss on WAN link via spine-switch-02. Throughput reduced by 56%.,network_issue,medium,2024-01-21 16:23:00
+9,101,log,WARN wan-gateway DNSTimeoutError: resolution failed for 125.178.13.107 after 3 retries at 2024-01-15 04:06:00,network_issue,high,2024-01-15 04:06:00
+10,125,ticket,Firewall rule blocking traffic between VLAN 30 and VLAN 20 via dns-resolver-prod.,network_issue,medium,2024-01-20 00:03:00
+11,65,log,ERROR mfa-broker AuthRejected: Bearer token mismatch for ykim at 2024-01-28 00:23:00,authentication_failure,medium,2024-01-28 00:23:00
+12,190,ticket,Pod checkout-svc restarting after release in prod-us. OOM kill in kubelet logs.,deployment_issue,high,2024-01-19 00:14:00
+13,30,log,ERROR ad-connector TokenValidationException: JWT expired for user ykim at 2024-01-21 00:25:00,authentication_failure,medium,2024-01-21 00:25:00
+14,149,ticket,Load balancer edge-router-01 reporting upstream timeouts. Backend 63.73.203.238 unreachable.,network_issue,medium,2024-01-24 16:24:00
+15,163,ticket,DNS lookup failures affecting nat-gateway-eu. Routing misconfiguration suspected on 167.43.68.81.,network_issue,medium,2024-01-27 12:13:00
+16,175,alert,ALERT: ci_failure_rate for payments-api exceeded 20% -> 73% failing,deployment_issue,medium,2024-01-16 00:15:00
+17,244,log,ERROR mysql-replica HealthCheckFailed: analytics-api cannot connect to backend at 2024-01-18 16:09:00,database_failure,high,2024-01-18 16:09:00
+18,259,alert,ALERT: db_deadlocks on mongodb-cluster-01 exceeded 5/min -> 18/min detected,database_failure,high,2024-01-21 16:32:00
+19,211,log,ERROR helm-controller DeployFailed: rollout of billing-service failed in prod-us at 2024-01-23 04:03:00,deployment_issue,high,2024-01-23 04:03:00
+20,214,log,ERROR pvc-controller VolumeBindTimeout: PVC for search-service unbound in prod-core at 2024-01-23 16:14:00,deployment_issue,medium,2024-01-23 16:14:00
+21,135,ticket,Firewall rule blocking traffic between VLAN 30 and VLAN 200 via dns-resolver-prod.,network_issue,medium,2024-01-22 00:28:00
+22,116,log,ERROR core-switch-A UpstreamTimeout: backend 156.213.15.128 unreachable at 2024-01-18 04:16:00,network_issue,medium,2024-01-18 04:16:00
+23,163,log,CRITICAL nat-gateway-eu RouteFlap: BGP session dropped with peer 40.122.156.30 at 2024-01-27 12:16:00,network_issue,high,2024-01-27 12:16:00
+24,249,log,ERROR cassandra-node-01 DeadlockDetected: transaction rolled back for search-service at 2024-01-19 16:09:00,database_failure,medium,2024-01-19 16:09:00
+25,132,log,ERROR wan-gateway RuleViolation: traffic blocked src=113.159.60.164 dst=85.188.113.57 port=8080 at 2024-01-21 08:25:00,network_issue,medium,2024-01-21 08:25:00
+26,98,log,WARN ad-connector RateLimited: token endpoint flooded by requests for crossi at 2024-02-03 12:08:00,authentication_failure,high,2024-02-03 12:08:00
+27,20,alert,ALERT: auth_error_rate on oauth2-server exceeded 5% -> 11% over 10min,authentication_failure,medium,2024-01-19 00:14:00
+28,183,alert,ALERT: nodes_not_ready hosting checkout-svc -> 1 nodes in NotReady in prod-core,deployment_issue,medium,2024-01-17 12:07:00
+29,166,ticket,Failover not triggering on bgp-peer-isp1. Redundant path to 149.187.21.195 unavailable.,network_issue,high,2024-01-28 04:27:00
+30,53,ticket,MFA push notifications not delivered via mfa-broker. User tlefevre locked out.,authentication_failure,high,2024-01-25 12:18:00
+31,261,ticket,HTTPS connection failing to cert-manager. Certificate for api.internal expired 4 days ago.,certificate_expiry,high,2024-01-15 04:03:00
+32,54,alert,ALERT: mfa_push_failures on ldap-directory exceeded 5% -> 16% undelivered,authentication_failure,high,2024-01-25 16:18:00
+33,44,alert,ALERT: mfa_push_failures on oauth2-server exceeded 5% -> 24% undelivered,authentication_failure,high,2024-01-23 16:32:00
+34,144,alert,ALERT: bgp_sessions on spine-switch-02 below threshold 2 -> 0 active,network_issue,high,2024-01-23 16:33:00
+35,93,log,ERROR mfa-broker TGTRenewalFailed: KDC unreachable for abolarin at 2024-02-02 12:16:00,authentication_failure,high,2024-02-02 12:16:00
+36,84,alert,ALERT: mfa_push_failures on ldap-directory exceeded 5% -> 11% undelivered,authentication_failure,high,2024-01-31 16:52:00
+37,268,log,ERROR vault-pki AccessDenied: SSL certificate untrusted for user bsantos at 2024-01-16 12:23:00,certificate_expiry,medium,2024-01-16 12:23:00
+38,96,alert,ALERT: session_expiry on api-gateway exceeded 20/min -> 86/min,authentication_failure,high,2024-02-03 04:38:00
+39,53,alert,ALERT: ldap_timeout_rate on mfa-broker exceeded 1% -> 26% timing out,authentication_failure,medium,2024-01-25 12:47:00
+40,98,ticket,Sessions expiring prematurely via ad-connector. Session store issue affecting crossi.,authentication_failure,high,2024-02-03 12:01:00
+41,28,log,WARN oauth2-server RateLimited: token endpoint flooded by requests for crossi at 2024-01-20 12:21:00,authentication_failure,high,2024-01-20 12:21:00
+42,142,log,ERROR border-router RuleViolation: traffic blocked src=164.104.203.235 dst=71.164.144.98 port=5432 at 2024-01-23 08:16:00,network_issue,medium,2024-01-23 08:16:00
+43,231,ticket,Disk IO on postgres-primary saturated. reporting-api queries taking 42.5s to respond.,database_failure,high,2024-01-16 04:26:00
+44,257,log,ERROR postgres-primary QueryTimeoutException: query exceeded 30s for order-service at 2024-01-21 08:24:00,database_failure,medium,2024-01-21 08:24:00
+45,234,ticket,mysql-primary crash loop. analytics-api health check failing due to DB unreachable.,database_failure,high,2024-01-16 16:21:00
+46,264,alert,ALERT: x509_expired_cert detected on lets-encrypt-agent for domain vpn.corp.net,certificate_expiry,high,2024-01-15 16:41:00
+47,207,ticket,Sidecar injection failing for notification-worker in prod-eu. Pods missing Envoy proxy.,deployment_issue,medium,2024-01-22 08:29:00
+48,30,ticket,Users unable to authenticate via ad-connector. Token validation failed for ykim.,authentication_failure,high,2024-01-21 00:15:00
+49,191,ticket,Deployment rollback triggered for auth-worker in prod-core. Health check failing.,deployment_issue,medium,2024-01-19 04:23:00
+50,111,log,WARN core-switch-A DNSTimeoutError: resolution failed for 166.146.251.52 after 3 retries at 2024-01-17 04:36:00,network_issue,high,2024-01-17 04:36:00
+51,36,log,CRITICAL saml-proxy ConnectionRefused: Redis auth backend unreachable for rnguyen at 2024-01-22 04:34:00,authentication_failure,high,2024-01-22 04:34:00
+52,189,alert,ALERT: sidecar_injection_failures for data-pipeline exceeded 0 -> 3 missing in prod-core,deployment_issue,medium,2024-01-18 16:29:00
+53,3,alert,ALERT: ldap_timeout_rate on api-gateway exceeded 1% -> 7% timing out,authentication_failure,medium,2024-01-15 12:30:00
+54,24,ticket,OAuth2 token endpoint on session-store returning 401 for account ykim.,authentication_failure,high,2024-01-19 16:26:00
+55,181,alert,ALERT: deployment_rollback triggered for gateway-proxy in prod — health check failing,deployment_issue,medium,2024-01-17 04:15:00
+56,217,ticket,Sidecar injection failing for search-service in prod-data. Pods missing Envoy proxy.,deployment_issue,medium,2024-01-24 08:22:00
+57,230,log,"CRITICAL postgres-primary PrimaryUnavailable: failover in progress, replica not ready at 2024-01-16 00:13:00",database_failure,high,2024-01-16 00:13:00
+58,208,ticket,Database migration V71 failed during order-service deployment in prod-eu.,deployment_issue,high,2024-01-22 12:03:00
+59,229,log,ERROR mongodb-cluster-01 DeadlockDetected: transaction rolled back for auth-service at 2024-01-15 16:34:00,database_failure,medium,2024-01-15 16:34:00
+60,12,alert,ALERT: sso_failure_rate on kerberos-kdc exceeded 10% -> 37% failing,authentication_failure,high,2024-01-17 08:55:00
+61,87,ticket,API gateway mfa-broker rejecting Bearer tokens. Auth backend unreachable for bsantos.,authentication_failure,high,2024-02-01 08:00:00
+62,198,log,CRITICAL flyway MigrationFailed: schema V49 failed for gateway-proxy at 2024-01-20 12:31:00,deployment_issue,high,2024-01-20 12:31:00
+63,30,alert,ALERT: auth_error_rate on ad-connector exceeded 5% -> 10% over 10min,authentication_failure,medium,2024-01-21 00:44:00
+64,147,log,CRITICAL vpn-concentrator TunnelDown: IPSec SA expired for 113.235.124.254 at 2024-01-24 08:21:00,network_issue,high,2024-01-24 08:21:00
+65,227,log,ERROR mongodb-cluster-01 QueryTimeoutException: query exceeded 30s for reporting-api at 2024-01-15 08:13:00,database_failure,medium,2024-01-15 08:13:00
+66,84,ticket,OAuth2 token endpoint on ldap-directory returning 401 for account bsantos.,authentication_failure,high,2024-01-31 16:23:00
+67,21,alert,ALERT: jwt_failures on token-service exceeded 50/min -> 89/min,authentication_failure,high,2024-01-19 04:30:00
+68,54,log,WARN ldap-directory PushTimeout: MFA push undelivered to tlefevre after 30s at 2024-01-25 16:21:00,authentication_failure,medium,2024-01-25 16:21:00
+69,124,log,ERROR dhcp-server-hq HighLatency: RTT 712ms to 63.166.244.135 at 2024-01-19 16:23:00,network_issue,medium,2024-01-19 16:23:00
+70,90,alert,ALERT: auth_error_rate on api-gateway exceeded 5% -> 37% over 10min,authentication_failure,medium,2024-02-02 00:30:00
+71,0,log,ERROR token-service TokenValidationException: JWT expired for user alopez at 2024-01-15 00:16:00,authentication_failure,medium,2024-01-15 00:16:00
+72,250,log,"CRITICAL redis-sentinel PrimaryUnavailable: failover in progress, replica not ready at 2024-01-20 00:19:00",database_failure,high,2024-01-20 00:19:00
+73,32,log,CRITICAL mfa-broker BindFailure: LDAP error 49 invalid credentials for jsmith at 2024-01-21 08:41:00,authentication_failure,high,2024-01-21 08:41:00
+74,151,ticket,VPN connectivity dropped via wan-gateway. Firewall blocking outbound on port 3306.,network_issue,medium,2024-01-25 04:10:00
+75,277,ticket,mTLS authentication failed on istio-citadel. Client cert for services.internal expired 3 days ago.,certificate_expiry,high,2024-01-18 08:27:00
+76,138,alert,ALERT: nat_failures on bgp-peer-isp1 exceeded 0.1% -> 9% failing,network_issue,high,2024-01-22 12:15:00
+77,258,ticket,Connection pool exhausted on mongodb-cluster-01. auth-service pods failing health checks.,database_failure,high,2024-01-21 12:08:00
+78,48,alert,ALERT: oauth_latency_p95 on mfa-broker exceeded 500ms -> 1682ms,authentication_failure,medium,2024-01-24 12:19:00
+79,236,ticket,High query latency on elasticsearch-data. P99 response time 31.0s causing auth-service timeouts.,database_failure,medium,2024-01-17 04:06:00
+80,97,log,ERROR api-gateway QueryTimeout: AD LDAP query timed out for jsmith at 2024-02-03 08:23:00,authentication_failure,medium,2024-02-03 08:23:00
+81,221,alert,ALERT: deployment_rollback triggered for search-service in prod-data — health check failing,deployment_issue,medium,2024-01-25 04:32:00
+82,274,alert,ALERT: x509_expired_cert detected on traefik-ingress for domain services.internal,certificate_expiry,high,2024-01-17 16:36:00
+83,246,ticket,High query latency on mysql-primary. P99 response time 42.5s causing order-service timeouts.,database_failure,medium,2024-01-19 04:00:00
+84,52,ticket,Active Directory auth failing via token-service for user mchen.,authentication_failure,high,2024-01-25 08:30:00
+85,120,ticket,Users on subnet 10.4.4.0/24 reporting packet loss. DNS resolution failing for vpn-concentrator.,network_issue,medium,2024-01-19 00:04:00
+86,23,log,ERROR kerberos-kdc TGTRenewalFailed: KDC unreachable for ykim at 2024-01-19 12:17:00,authentication_failure,high,2024-01-19 12:17:00
+87,58,ticket,Sessions expiring prematurely via identity-provider. Session store issue affecting dpatel.,authentication_failure,high,2024-01-26 12:27:00
+88,11,log,ERROR mfa-broker OAuthError: invalid_grant for crossi at 2024-01-17 04:14:00,authentication_failure,medium,2024-01-17 04:14:00
+89,27,alert,ALERT: kerberos_failures on oauth2-server exceeded 10/min -> 57/min,authentication_failure,high,2024-01-20 08:29:00
+90,196,log,ERROR traffic-manager SwitchFailed: blue/green aborted for gateway-proxy in prod-core at 2024-01-20 04:05:00,deployment_issue,high,2024-01-20 04:05:00
+91,88,log,WARN saml-proxy RateLimited: token endpoint flooded by requests for fmüller at 2024-02-01 12:09:00,authentication_failure,high,2024-02-01 12:09:00
+92,16,alert,ALERT: session_expiry on ad-connector exceeded 20/min -> 44/min,authentication_failure,high,2024-01-18 04:08:00
+93,208,log,CRITICAL flyway MigrationFailed: schema V71 failed for order-service at 2024-01-22 12:04:00,deployment_issue,high,2024-01-22 12:04:00
+94,27,log,ERROR oauth2-server QueryTimeout: AD LDAP query timed out for jsmith at 2024-01-20 08:35:00,authentication_failure,medium,2024-01-20 08:35:00
+95,71,ticket,SSO login broken via sso-provider. JWT expired errors for ykim in browser console.,authentication_failure,medium,2024-01-29 04:03:00
+96,65,ticket,LDAP bind failing on mfa-broker. Directory returning connection refused for ykim.,authentication_failure,high,2024-01-28 00:18:00
+97,202,ticket,Container image pull failing for notification-worker in prod. Registry credentials expired.,deployment_issue,medium,2024-01-21 08:04:00
+98,188,alert,ALERT: migration_job V77 = failed for reporting-api in prod-data,deployment_issue,high,2024-01-18 12:21:00
+99,269,log,CRITICAL vault-pki ChainValidationFailed: intermediate cert expired for admin.internal at 2024-01-16 16:37:00,certificate_expiry,high,2024-01-16 16:37:00
+100,197,ticket,Sidecar injection failing for payments-api in prod-eu. Pods missing Envoy proxy.,deployment_issue,medium,2024-01-20 08:30:00
+101,130,log,ERROR wan-gateway PacketLossException: 28% loss on 127.131.95.4 at 2024-01-21 00:23:00,network_issue,medium,2024-01-21 00:23:00
+102,98,alert,ALERT: oauth_latency_p95 on ad-connector exceeded 500ms -> 1886ms,authentication_failure,medium,2024-02-03 12:17:00
+103,127,ticket,BGP propagation delay on dns-resolver-prod causing connectivity failures from 22.115.119.14.,network_issue,medium,2024-01-20 08:13:00
+104,25,log,ERROR oauth2-server AuthRejected: Bearer token mismatch for rnguyen at 2024-01-20 00:35:00,authentication_failure,medium,2024-01-20 00:35:00
+105,154,log,ERROR nat-gateway-eu HighLatency: RTT 469ms to 37.69.155.2 at 2024-01-25 16:17:00,network_issue,medium,2024-01-25 16:17:00
+106,18,ticket,Sessions expiring prematurely via kerberos-kdc. Session store issue affecting dpatel.,authentication_failure,high,2024-01-18 12:02:00
+107,48,log,WARN mfa-broker RateLimited: token endpoint flooded by requests for alopez at 2024-01-24 12:20:00,authentication_failure,high,2024-01-24 12:20:00
+108,104,ticket,Intermittent packet loss on WAN link via vpn-concentrator. Throughput reduced by 46%.,network_issue,medium,2024-01-15 16:23:00
+109,15,log,ERROR sso-provider AuthRejected: Bearer token mismatch for rnguyen at 2024-01-18 00:16:00,authentication_failure,medium,2024-01-18 00:16:00
+110,246,alert,ALERT: db_query_latency_p99 on mysql-primary exceeded 1s -> 42.5s observed,database_failure,medium,2024-01-19 04:06:00
+111,76,log,CRITICAL ad-connector ConnectionRefused: Redis auth backend unreachable for dpatel at 2024-01-30 04:16:00,authentication_failure,high,2024-01-30 04:16:00
+112,2,log,CRITICAL api-gateway BindFailure: LDAP error 49 invalid credentials for alopez at 2024-01-15 08:22:00,authentication_failure,high,2024-01-15 08:22:00
+113,41,ticket,SSO login broken via token-service. JWT expired errors for abolarin in browser console.,authentication_failure,medium,2024-01-23 04:26:00
+114,60,ticket,Users unable to authenticate via identity-provider. Token validation failed for rnguyen.,authentication_failure,high,2024-01-27 00:15:00
+115,275,alert,ALERT: jwt_signing_cert_expiry on api-gateway-tls -> token validation failing for api.prod.corp,certificate_expiry,high,2024-01-18 00:50:00
+116,91,ticket,SSO login broken via mfa-broker. JWT expired errors for abolarin in browser console.,authentication_failure,medium,2024-02-02 04:18:00
+117,79,alert,ALERT: ad_bind_failures on ad-connector exceeded 5/min -> 32/min,authentication_failure,high,2024-01-30 16:25:00
+118,207,log,ERROR istio-injector SidecarFailed: Envoy injection rejected for notification-worker in prod-eu at 2024-01-22 08:43:00,deployment_issue,high,2024-01-22 08:43:00
+119,57,log,ERROR sso-provider QueryTimeout: AD LDAP query timed out for jsmith at 2024-01-26 08:34:00,authentication_failure,medium,2024-01-26 08:34:00
+120,139,ticket,Load balancer border-router reporting upstream timeouts. Backend 98.195.163.179 unreachable.,network_issue,medium,2024-01-22 16:27:00
+121,190,log,CRITICAL kubelet OOMKilled: container checkout-svc killed in prod-us at 2024-01-19 00:23:00,deployment_issue,high,2024-01-19 00:23:00
+122,85,log,ERROR auth-service AuthRejected: Bearer token mismatch for mchen at 2024-02-01 00:18:00,authentication_failure,medium,2024-02-01 00:18:00
+123,278,log,ERROR web-proxy AccessDenied: SSL certificate untrusted for user tlefevre at 2024-01-18 12:03:00,certificate_expiry,medium,2024-01-18 12:03:00
+124,195,log,WARN ci-runner TestFailure: integration tests failed for reporting-api in prod-us at 2024-01-20 00:19:00,deployment_issue,high,2024-01-20 00:19:00
+125,34,log,WARN ad-connector PushTimeout: MFA push undelivered to alopez after 30s at 2024-01-21 16:05:00,authentication_failure,medium,2024-01-21 16:05:00
+126,142,ticket,"High latency on border-router. Network degraded, RTT 780ms to gateway 164.104.203.235.",network_issue,medium,2024-01-23 08:03:00
+127,118,alert,ALERT: nat_failures on dns-resolver-prod exceeded 0.1% -> 8% failing,network_issue,high,2024-01-18 12:29:00
+128,173,alert,ALERT: nodes_not_ready hosting billing-service -> 1 nodes in NotReady in prod-us,deployment_issue,medium,2024-01-15 12:36:00
+129,15,ticket,LDAP bind failing on sso-provider. Directory returning connection refused for rnguyen.,authentication_failure,high,2024-01-18 00:09:00
+130,43,ticket,MFA push notifications not delivered via mfa-broker. User rnguyen locked out.,authentication_failure,high,2024-01-23 12:28:00
+131,257,alert,ALERT: replication_lag on postgres-primary exceeded 30s -> 132s behind primary,database_failure,high,2024-01-21 08:37:00
+132,21,log,ERROR token-service OAuthError: invalid_grant for fmüller at 2024-01-19 04:05:00,authentication_failure,medium,2024-01-19 04:05:00
+133,119,alert,ALERT: dhcp_utilization on core-switch-A exceeded 90% -> 96% pool used,network_issue,high,2024-01-18 16:56:00
+134,201,ticket,Deployment rollback triggered for billing-service in prod-eu. Health check failing.,deployment_issue,medium,2024-01-21 04:10:00
+135,9,log,ERROR ad-connector AssertionExpired: SAML response out of skew for crossi at 2024-01-16 16:31:00,authentication_failure,medium,2024-01-16 16:31:00
+136,62,ticket,Active Directory auth failing via api-gateway for user abolarin.,authentication_failure,high,2024-01-27 08:19:00
+137,205,alert,ALERT: ci_failure_rate for data-pipeline exceeded 20% -> 68% failing,deployment_issue,medium,2024-01-22 00:49:00
+138,137,log,CRITICAL wan-gateway TunnelDown: IPSec SA expired for 80.96.57.9 at 2024-01-22 08:24:00,network_issue,high,2024-01-22 08:24:00
+139,44,log,WARN oauth2-server PushTimeout: MFA push undelivered to crossi after 30s at 2024-01-23 16:26:00,authentication_failure,medium,2024-01-23 16:26:00
+140,32,alert,ALERT: sso_failure_rate on mfa-broker exceeded 10% -> 39% failing,authentication_failure,high,2024-01-21 08:48:00
+141,19,ticket,Password reset failed on oauth2-server. SMTP relay rejecting auth for mchen.,authentication_failure,high,2024-01-18 16:29:00
+142,86,log,CRITICAL token-service ConnectionRefused: Redis auth backend unreachable for ykim at 2024-02-01 04:15:00,authentication_failure,high,2024-02-01 04:15:00
+143,220,log,CRITICAL kubelet OOMKilled: container search-service killed in prod-data at 2024-01-25 00:36:00,deployment_issue,high,2024-01-25 00:36:00
+144,177,log,ERROR istio-injector SidecarFailed: Envoy injection rejected for order-service in prod-us at 2024-01-16 08:26:00,deployment_issue,high,2024-01-16 08:26:00
+145,253,alert,ALERT: slow_queries on timescaledb-prod exceeded 10/min -> 21/min blocking,database_failure,medium,2024-01-20 12:25:00
+146,131,alert,ALERT: dns_failures on dns-resolver-prod exceeded 10/min -> 70/min sustained,network_issue,high,2024-01-21 04:09:00
+147,212,alert,ALERT: oom_kills on checkout-svc exceeded 0 -> 1 kills in prod-eu,deployment_issue,high,2024-01-23 08:42:00
+148,6,alert,ALERT: session_expiry on ad-connector exceeded 20/min -> 75/min,authentication_failure,high,2024-01-16 04:50:00
+149,117,alert,ALERT: lb_5xx_rate on load-balancer-web exceeded 1% -> 19% upstream errors,network_issue,medium,2024-01-18 08:15:00
+150,268,alert,ALERT: access_denied_rate on vault-pki exceeded 10% -> 27% due to cert error,certificate_expiry,medium,2024-01-16 12:48:00
+151,254,log,ERROR clickhouse-01 HealthCheckFailed: order-service cannot connect to backend at 2024-01-20 16:22:00,database_failure,high,2024-01-20 16:22:00
+152,243,ticket,Slow query on cassandra-node-01 blocking 20 connections. analytics-api degraded.,database_failure,medium,2024-01-18 12:26:00
+153,23,alert,ALERT: ldap_timeout_rate on kerberos-kdc exceeded 1% -> 27% timing out,authentication_failure,medium,2024-01-19 12:20:00
+154,202,alert,ALERT: oom_kills on notification-worker exceeded 0 -> 8 kills in prod,deployment_issue,high,2024-01-21 08:14:00
+155,158,ticket,Users cannot reach spine-switch-02. NAT translation failing on gateway 94.220.54.3.,network_issue,medium,2024-01-26 12:14:00
+156,11,ticket,SSO login broken via mfa-broker. JWT expired errors for crossi in browser console.,authentication_failure,medium,2024-01-17 04:02:00
+157,71,alert,ALERT: jwt_failures on sso-provider exceeded 50/min -> 60/min,authentication_failure,high,2024-01-29 04:09:00
+158,203,alert,ALERT: nodes_not_ready hosting auth-worker -> 1 nodes in NotReady in prod-us,deployment_issue,medium,2024-01-21 12:22:00
+159,210,alert,ALERT: pod_restarts on inventory-svc exceeded 3 -> 11 restarts in prod-us,deployment_issue,medium,2024-01-23 00:43:00
+160,131,ticket,VPN connectivity dropped via dns-resolver-prod. Firewall blocking outbound on port 80.,network_issue,medium,2024-01-21 04:01:00
+161,172,log,ERROR containerd ImagePullBackOff: payments-api:latest unauthorized in prod at 2024-01-15 08:07:00,deployment_issue,medium,2024-01-15 08:07:00
+162,161,log,WARN firewall-cluster DNSTimeoutError: resolution failed for 57.95.221.102 after 3 retries at 2024-01-27 04:11:00,network_issue,high,2024-01-27 04:11:00
+163,152,log,ERROR nat-gateway-eu RuleViolation: traffic blocked src=123.184.138.27 dst=43.44.95.111 port=6379 at 2024-01-25 08:34:00,network_issue,medium,2024-01-25 08:34:00
+164,136,log,ERROR firewall-cluster UpstreamTimeout: backend 55.201.65.187 unreachable at 2024-01-22 04:30:00,network_issue,medium,2024-01-22 04:30:00
+165,122,alert,ALERT: network_latency_ms on firewall-cluster p99 exceeded 200ms -> 792ms,network_issue,medium,2024-01-19 08:32:00
+166,169,log,WARN spine-switch-02 TopologyChange: STP reconverging on VLAN 50 at 2024-01-28 16:19:00,network_issue,medium,2024-01-28 16:19:00
+167,200,alert,ALERT: pod_restarts on gateway-proxy exceeded 3 -> 17 restarts in prod,deployment_issue,medium,2024-01-21 00:24:00
+168,143,alert,ALERT: firewall_drop_rate on vpn-concentrator exceeded 1% -> 17% blocked,network_issue,high,2024-01-23 12:30:00
+169,85,alert,ALERT: api_401_rate on auth-service exceeded 2% -> 12% unauthorized,authentication_failure,high,2024-02-01 00:19:00
+170,251,alert,ALERT: disk_io_wait on clickhouse-01 exceeded 80% -> 85% utilisation,database_failure,high,2024-01-20 04:27:00
+171,156,alert,ALERT: vpn_stability on wan-gateway below 99% -> 75% uptime,network_issue,high,2024-01-26 04:18:00
+172,68,ticket,Sessions expiring prematurely via token-service. Session store issue affecting ykim.,authentication_failure,high,2024-01-28 12:05:00
+173,259,log,ERROR mongodb-cluster-01 DeadlockDetected: transaction rolled back for order-service at 2024-01-21 16:19:00,database_failure,medium,2024-01-21 16:19:00
+174,64,alert,ALERT: mfa_push_failures on api-gateway exceeded 5% -> 20% undelivered,authentication_failure,high,2024-01-27 16:38:00
+175,114,alert,ALERT: bgp_sessions on spine-switch-02 below threshold 2 -> 0 active,network_issue,high,2024-01-17 16:44:00
+176,242,log,"CRITICAL elasticsearch-data OOMKilled: memory limit exceeded, connections dropped at 2024-01-18 08:09:00",database_failure,high,2024-01-18 08:09:00
+177,279,ticket,User jsmith cannot authenticate via traefik-ingress. TLS cert for portal.internal expired.,certificate_expiry,high,2024-01-18 16:21:00
+178,239,log,ERROR timescaledb-prod DeadlockDetected: transaction rolled back for reporting-api at 2024-01-17 16:31:00,database_failure,medium,2024-01-17 16:31:00
+179,110,ticket,Users on subnet 10.5.41.0/24 reporting packet loss. DNS resolution failing for load-balancer-web.,network_issue,medium,2024-01-17 00:23:00
+180,161,ticket,VPN connectivity dropped via firewall-cluster. Firewall blocking outbound on port 8443.,network_issue,medium,2024-01-27 04:06:00
+181,42,log,CRITICAL api-gateway BindFailure: LDAP error 49 invalid credentials for ykim at 2024-01-23 08:31:00,authentication_failure,high,2024-01-23 08:31:00
+182,45,ticket,LDAP bind failing on kerberos-kdc. Directory returning connection refused for fmüller.,authentication_failure,high,2024-01-24 00:22:00
+183,247,log,ERROR mongodb-cluster-01 QueryTimeoutException: query exceeded 30s for checkout-svc at 2024-01-19 08:30:00,database_failure,medium,2024-01-19 08:30:00
+184,83,alert,ALERT: ldap_timeout_rate on session-store exceeded 1% -> 4% timing out,authentication_failure,medium,2024-01-31 12:35:00
+185,102,alert,ALERT: network_latency_ms on wan-gateway p99 exceeded 200ms -> 325ms,network_issue,medium,2024-01-15 08:36:00
+186,37,log,ERROR ad-connector QueryTimeout: AD LDAP query timed out for jsmith at 2024-01-22 08:20:00,authentication_failure,medium,2024-01-22 08:20:00
+187,2,alert,ALERT: sso_failure_rate on api-gateway exceeded 10% -> 50% failing,authentication_failure,high,2024-01-15 08:42:00
+188,35,log,ERROR saml-proxy AuthRejected: Bearer token mismatch for bsantos at 2024-01-22 00:29:00,authentication_failure,medium,2024-01-22 00:29:00
+189,206,log,ERROR traffic-manager SwitchFailed: blue/green aborted for data-pipeline in prod-eu at 2024-01-22 04:15:00,deployment_issue,high,2024-01-22 04:15:00
+190,150,log,ERROR border-router PacketLossException: 55% loss on 98.27.50.112 at 2024-01-25 00:19:00,network_issue,medium,2024-01-25 00:19:00
+191,204,ticket,Helm chart deployment of inventory-svc stuck in pending state in prod-data. PVC not bound.,deployment_issue,medium,2024-01-21 16:22:00
+192,159,log,WARN dhcp-server-hq TopologyChange: STP reconverging on VLAN 30 at 2024-01-26 16:19:00,network_issue,medium,2024-01-26 16:19:00
+193,144,ticket,Intermittent packet loss on WAN link via spine-switch-02. Throughput reduced by 43%.,network_issue,medium,2024-01-23 16:26:00
+194,81,ticket,SSO login broken via sso-provider. JWT expired errors for alopez in browser console.,authentication_failure,medium,2024-01-31 04:30:00
+195,55,alert,ALERT: api_401_rate on api-gateway exceeded 2% -> 24% unauthorized,authentication_failure,high,2024-01-26 00:32:00
+196,11,alert,ALERT: jwt_failures on mfa-broker exceeded 50/min -> 66/min,authentication_failure,high,2024-01-17 04:27:00
+197,16,log,CRITICAL ad-connector ConnectionRefused: Redis auth backend unreachable for ykim at 2024-01-18 04:10:00,authentication_failure,high,2024-01-18 04:10:00
+198,16,ticket,Kerberos ticket renewal broken on ad-connector for user ykim after patch.,authentication_failure,high,2024-01-18 04:01:00
+199,28,ticket,Sessions expiring prematurely via oauth2-server. Session store issue affecting crossi.,authentication_failure,high,2024-01-20 12:12:00
+200,66,alert,ALERT: session_expiry on identity-provider exceeded 20/min -> 71/min,authentication_failure,high,2024-01-28 04:26:00
+201,83,log,ERROR session-store TGTRenewalFailed: KDC unreachable for crossi at 2024-01-31 12:29:00,authentication_failure,high,2024-01-31 12:29:00
+202,240,log,"CRITICAL redis-sentinel PrimaryUnavailable: failover in progress, replica not ready at 2024-01-18 00:04:00",database_failure,high,2024-01-18 00:04:00
+203,25,alert,ALERT: api_401_rate on oauth2-server exceeded 2% -> 13% unauthorized,authentication_failure,high,2024-01-20 00:43:00
+204,4,log,WARN api-gateway PushTimeout: MFA push undelivered to skowalski after 30s at 2024-01-15 16:39:00,authentication_failure,medium,2024-01-15 16:39:00
+205,194,log,ERROR pvc-controller VolumeBindTimeout: PVC for search-service unbound in prod at 2024-01-19 16:17:00,deployment_issue,medium,2024-01-19 16:17:00
+206,255,ticket,Database cassandra-node-01 returning connection refused. checkout-svc cannot connect to backend.,database_failure,high,2024-01-21 00:27:00
+207,70,alert,ALERT: auth_error_rate on ad-connector exceeded 5% -> 29% over 10min,authentication_failure,medium,2024-01-29 00:43:00
+208,105,log,WARN edge-router-01 TranslationFail: SNAT pool exhausted on subnet 10.2.8.0/24 at 2024-01-16 00:13:00,network_issue,medium,2024-01-16 00:13:00
+209,142,alert,ALERT: network_latency_ms on border-router p99 exceeded 200ms -> 528ms,network_issue,medium,2024-01-23 08:31:00
+210,197,alert,ALERT: image_pull_failures for payments-api in prod-eu -> 7 failures,deployment_issue,medium,2024-01-20 08:35:00
+211,116,alert,ALERT: vpn_stability on core-switch-A below 99% -> 63% uptime,network_issue,high,2024-01-18 04:41:00
+212,165,ticket,Firewall rule blocking traffic between VLAN 30 and VLAN 50 via spine-switch-02.,network_issue,medium,2024-01-28 00:18:00
+213,69,log,ERROR api-gateway AssertionExpired: SAML response out of skew for crossi at 2024-01-28 16:38:00,authentication_failure,medium,2024-01-28 16:38:00
+214,180,alert,ALERT: pod_restarts on search-service exceeded 3 -> 13 restarts in prod-apac,deployment_issue,medium,2024-01-17 00:41:00
+215,209,log,ERROR argo-rollouts CanaryFailed: 15.5% errors for payments-api in prod-eu at 2024-01-22 16:07:00,deployment_issue,high,2024-01-22 16:07:00
+216,33,log,ERROR ldap-directory TGTRenewalFailed: KDC unreachable for bsantos at 2024-01-21 12:12:00,authentication_failure,high,2024-01-21 12:12:00
+217,224,ticket,Helm chart deployment of inventory-svc stuck in pending state in prod-core. PVC not bound.,deployment_issue,medium,2024-01-25 16:04:00
+218,140,alert,ALERT: packet_loss_rate on edge-router-01 exceeded threshold 5% -> 49% over 10min,network_issue,high,2024-01-23 00:28:00
+219,181,ticket,Deployment rollback triggered for gateway-proxy in prod. Health check failing.,deployment_issue,medium,2024-01-17 04:09:00
+220,31,ticket,SSO login broken via mfa-broker. JWT expired errors for fmüller in browser console.,authentication_failure,medium,2024-01-21 04:07:00
+221,9,ticket,Password reset failed on ad-connector. SMTP relay rejecting auth for crossi.,authentication_failure,high,2024-01-16 16:23:00
+222,5,log,ERROR kerberos-kdc AuthRejected: Bearer token mismatch for jsmith at 2024-01-16 00:11:00,authentication_failure,medium,2024-01-16 00:11:00
+223,235,alert,ALERT: db_connection_failures on redis-sentinel exceeded 1% -> 17% failing,database_failure,high,2024-01-17 00:30:00
+224,93,alert,ALERT: ldap_timeout_rate on mfa-broker exceeded 1% -> 24% timing out,authentication_failure,medium,2024-02-02 12:18:00
+225,258,log,CRITICAL mongodb-cluster-01 ReplicationLagCritical: lag=200s primary diverged at 2024-01-21 12:12:00,database_failure,high,2024-01-21 12:12:00
+226,107,alert,ALERT: lb_5xx_rate on firewall-cluster exceeded 1% -> 22% upstream errors,network_issue,medium,2024-01-16 08:17:00
+227,195,ticket,CI/CD pipeline failing at integration stage for reporting-api after merge to prod-us.,deployment_issue,medium,2024-01-20 00:09:00
+228,114,log,ERROR spine-switch-02 HighLatency: RTT 528ms to 138.28.63.133 at 2024-01-17 16:39:00,network_issue,medium,2024-01-17 16:39:00
+229,54,ticket,OAuth2 token endpoint on ldap-directory returning 401 for account tlefevre.,authentication_failure,high,2024-01-25 16:10:00
+230,139,log,WARN border-router TopologyChange: STP reconverging on VLAN 30 at 2024-01-22 16:31:00,network_issue,medium,2024-01-22 16:31:00
+231,132,alert,ALERT: network_latency_ms on wan-gateway p99 exceeded 200ms -> 751ms,network_issue,medium,2024-01-21 08:35:00
+232,12,ticket,Active Directory auth failing via kerberos-kdc for user alopez.,authentication_failure,high,2024-01-17 08:25:00
+233,170,alert,ALERT: pod_restarts on gateway-proxy exceeded 3 -> 10 restarts in prod-apac,deployment_issue,medium,2024-01-15 00:30:00
+234,141,alert,ALERT: dns_failures on spine-switch-02 exceeded 10/min -> 72/min sustained,network_issue,high,2024-01-23 04:32:00
+235,3,log,ERROR api-gateway TGTRenewalFailed: KDC unreachable for abolarin at 2024-01-15 12:25:00,authentication_failure,high,2024-01-15 12:25:00
+236,9,alert,ALERT: ad_bind_failures on ad-connector exceeded 5/min -> 40/min,authentication_failure,high,2024-01-16 16:30:00
+237,144,log,ERROR spine-switch-02 HighLatency: RTT 791ms to 135.251.235.44 at 2024-01-23 16:40:00,network_issue,medium,2024-01-23 16:40:00
+238,87,log,ERROR mfa-broker QueryTimeout: AD LDAP query timed out for bsantos at 2024-02-01 08:08:00,authentication_failure,medium,2024-02-01 08:08:00
+239,189,log,ERROR argo-rollouts CanaryFailed: 12.7% errors for data-pipeline in prod-core at 2024-01-18 16:39:00,deployment_issue,high,2024-01-18 16:39:00
+240,272,log,CRITICAL acme-client CertValidationError: JWT signing cert expired for auth.company.com at 2024-01-17 08:24:00,certificate_expiry,high,2024-01-17 08:24:00
+241,133,log,CRITICAL dns-resolver-prod RouteFlap: BGP session dropped with peer 190.185.39.235 at 2024-01-21 12:11:00,network_issue,high,2024-01-21 12:11:00
+242,33,ticket,MFA push notifications not delivered via ldap-directory. User bsantos locked out.,authentication_failure,high,2024-01-21 12:07:00
+243,134,alert,ALERT: bgp_sessions on spine-switch-02 below threshold 2 -> 0 active,network_issue,high,2024-01-21 16:40:00
+244,134,log,ERROR spine-switch-02 HighLatency: RTT 818ms to 140.228.28.117 at 2024-01-21 16:24:00,network_issue,medium,2024-01-21 16:24:00
+245,229,ticket,Deadlock detected on mongodb-cluster-01. auth-service write operations timing out.,database_failure,high,2024-01-15 16:19:00
+246,102,log,ERROR wan-gateway RuleViolation: traffic blocked src=19.146.241.179 dst=45.240.229.158 port=80 at 2024-01-15 08:29:00,network_issue,medium,2024-01-15 08:29:00
+247,81,alert,ALERT: jwt_failures on sso-provider exceeded 50/min -> 130/min,authentication_failure,high,2024-01-31 04:54:00
+248,77,log,ERROR sso-provider QueryTimeout: AD LDAP query timed out for bsantos at 2024-01-30 08:25:00,authentication_failure,medium,2024-01-30 08:25:00
+249,262,log,CRITICAL haproxy-ssl CertValidationError: JWT signing cert expired for auth.company.com at 2024-01-15 08:28:00,certificate_expiry,high,2024-01-15 08:28:00
+250,123,ticket,DNS lookup failures affecting border-router. Routing misconfiguration suspected on 23.245.87.135.,network_issue,medium,2024-01-19 12:13:00
+251,157,alert,ALERT: lb_5xx_rate on spine-switch-02 exceeded 1% -> 24% upstream errors,network_issue,medium,2024-01-26 08:50:00
+252,37,alert,ALERT: kerberos_failures on ad-connector exceeded 10/min -> 59/min,authentication_failure,high,2024-01-22 08:29:00
+253,225,log,ERROR redis-cache ConnectionRefused: cannot reach primary host at 2024-01-15 00:15:00,database_failure,medium,2024-01-15 00:15:00
+254,117,log,CRITICAL load-balancer-web TunnelDown: IPSec SA expired for 116.247.237.53 at 2024-01-18 08:15:00,network_issue,high,2024-01-18 08:15:00
+255,120,alert,ALERT: packet_loss_rate on vpn-concentrator exceeded threshold 5% -> 58% over 10min,network_issue,high,2024-01-19 00:21:00
+256,273,ticket,API calls to cloudflare-origin failing with SSL verification error. auth.company.com cert not trusted.,certificate_expiry,medium,2024-01-17 12:00:00
+257,72,log,CRITICAL oauth2-server BindFailure: LDAP error 49 invalid credentials for tlefevre at 2024-01-29 08:35:00,authentication_failure,high,2024-01-29 08:35:00
+258,221,log,ERROR helm-controller DeployFailed: rollout of search-service failed in prod-data at 2024-01-25 04:07:00,deployment_issue,high,2024-01-25 04:07:00
+259,116,ticket,Failover not triggering on core-switch-A. Redundant path to 156.213.15.128 unavailable.,network_issue,high,2024-01-18 04:14:00
+260,60,log,ERROR identity-provider TokenValidationException: JWT expired for user rnguyen at 2024-01-27 00:16:00,authentication_failure,medium,2024-01-27 00:16:00
+261,29,alert,ALERT: ad_bind_failures on oauth2-server exceeded 5/min -> 24/min,authentication_failure,high,2024-01-20 16:12:00
+262,226,log,CRITICAL redis-cache ConnectionPoolExhausted: max 10 connections reached at 2024-01-15 04:26:00,database_failure,high,2024-01-15 04:26:00
+263,26,ticket,Kerberos ticket renewal broken on auth-service for user alopez after patch.,authentication_failure,high,2024-01-20 04:12:00
+264,215,log,WARN ci-runner TestFailure: integration tests failed for search-service in prod-core at 2024-01-24 00:31:00,deployment_issue,high,2024-01-24 00:31:00
+265,74,ticket,OAuth2 token endpoint on token-service returning 401 for account skowalski.,authentication_failure,high,2024-01-29 16:25:00
+266,94,ticket,OAuth2 token endpoint on sso-provider returning 401 for account crossi.,authentication_failure,high,2024-02-02 16:29:00
+267,34,ticket,OAuth2 token endpoint on ad-connector returning 401 for account alopez.,authentication_failure,high,2024-01-21 16:01:00
+268,232,log,"CRITICAL redis-cache OOMKilled: memory limit exceeded, connections dropped at 2024-01-16 08:29:00",database_failure,high,2024-01-16 08:29:00
+269,47,alert,ALERT: kerberos_failures on kerberos-kdc exceeded 10/min -> 51/min,authentication_failure,high,2024-01-24 08:18:00
+270,50,alert,ALERT: auth_error_rate on saml-proxy exceeded 5% -> 34% over 10min,authentication_failure,medium,2024-01-25 00:23:00
+271,224,log,ERROR pvc-controller VolumeBindTimeout: PVC for inventory-svc unbound in prod-core at 2024-01-25 16:10:00,deployment_issue,medium,2024-01-25 16:10:00
+272,94,alert,ALERT: mfa_push_failures on sso-provider exceeded 5% -> 32% undelivered,authentication_failure,high,2024-02-02 16:46:00
+273,0,ticket,Users unable to authenticate via token-service. Token validation failed for alopez.,authentication_failure,high,2024-01-15 00:07:00
+274,275,ticket,JWT signing certificate on api-gateway-tls expired. Token validation failing for fmüller.,certificate_expiry,high,2024-01-18 00:20:00
+275,112,alert,ALERT: network_latency_ms on core-switch-A p99 exceeded 200ms -> 765ms,network_issue,medium,2024-01-17 08:33:00
+276,218,log,CRITICAL flyway MigrationFailed: schema V66 failed for analytics-api at 2024-01-24 12:13:00,deployment_issue,high,2024-01-24 12:13:00
+277,171,alert,ALERT: deployment_rollback triggered for auth-worker in prod-us — health check failing,deployment_issue,medium,2024-01-15 04:51:00
+278,111,ticket,VPN connectivity dropped via core-switch-A. Firewall blocking outbound on port 443.,network_issue,medium,2024-01-17 04:25:00
+279,46,alert,ALERT: session_expiry on oauth2-server exceeded 20/min -> 58/min,authentication_failure,high,2024-01-24 04:14:00
+280,90,ticket,Users unable to authenticate via api-gateway. Token validation failed for bsantos.,authentication_failure,high,2024-02-02 00:05:00
+281,190,alert,ALERT: pod_restarts on checkout-svc exceeded 3 -> 5 restarts in prod-us,deployment_issue,medium,2024-01-19 00:30:00
+282,213,log,CRITICAL node-controller NodeNotReady: node hosting checkout-svc failed check at 2024-01-23 12:17:00,deployment_issue,high,2024-01-23 12:17:00
+283,109,alert,ALERT: dhcp_utilization on spine-switch-02 exceeded 90% -> 93% pool used,network_issue,high,2024-01-16 16:36:00
+284,174,ticket,Helm chart deployment of payments-api stuck in pending state in prod-apac. PVC not bound.,deployment_issue,medium,2024-01-15 16:20:00
+285,57,ticket,API gateway sso-provider rejecting Bearer tokens. Auth backend unreachable for jsmith.,authentication_failure,high,2024-01-26 08:20:00
+286,243,log,WARN cassandra-node-01 SlowQuery: blocking 20 connections for 31.0s at 2024-01-18 12:27:00,database_failure,medium,2024-01-18 12:27:00
+287,219,log,ERROR argo-rollouts CanaryFailed: 11.3% errors for order-service in prod at 2024-01-24 16:39:00,deployment_issue,high,2024-01-24 16:39:00
+288,248,alert,ALERT: connection_pool_usage on clickhouse-01 exceeded 90% -> 50 connections active,database_failure,high,2024-01-19 12:30:00
+289,209,alert,ALERT: sidecar_injection_failures for payments-api exceeded 0 -> 4 missing in prod-eu,deployment_issue,medium,2024-01-22 16:26:00
+290,106,log,ERROR edge-router-01 UpstreamTimeout: backend 149.242.129.10 unreachable at 2024-01-16 04:10:00,network_issue,medium,2024-01-16 04:10:00
+291,183,ticket,Kubernetes node NotReady after upgrade. Workloads for checkout-svc evicted in prod-core.,deployment_issue,medium,2024-01-17 12:00:00
+292,17,log,ERROR sso-provider QueryTimeout: AD LDAP query timed out for abolarin at 2024-01-18 08:17:00,authentication_failure,medium,2024-01-18 08:17:00
+293,103,ticket,DNS lookup failures affecting dns-resolver-prod. Routing misconfiguration suspected on 117.234.32.29.,network_issue,medium,2024-01-15 12:05:00
+294,77,ticket,API gateway sso-provider rejecting Bearer tokens. Auth backend unreachable for bsantos.,authentication_failure,high,2024-01-30 08:14:00
+295,279,log,CRITICAL traefik-ingress ChainValidationFailed: intermediate cert expired for portal.internal at 2024-01-18 16:33:00,certificate_expiry,high,2024-01-18 16:33:00
+296,230,alert,ALERT: primary_unavailable on postgres-primary -> automatic failover not completed,database_failure,high,2024-01-16 00:17:00
+297,43,alert,ALERT: ldap_timeout_rate on mfa-broker exceeded 1% -> 30% timing out,authentication_failure,medium,2024-01-23 12:55:00
+298,266,alert,ALERT: mtls_auth_failures on nginx-ingress exceeded 1% -> 24% connections rejected,certificate_expiry,high,2024-01-16 04:33:00
+299,204,log,ERROR pvc-controller VolumeBindTimeout: PVC for inventory-svc unbound in prod-data at 2024-01-21 16:26:00,deployment_issue,medium,2024-01-21 16:26:00
+300,128,alert,ALERT: nat_failures on dns-resolver-prod exceeded 0.1% -> 14% failing,network_issue,high,2024-01-20 12:33:00
+301,40,alert,ALERT: auth_error_rate on ldap-directory exceeded 5% -> 25% over 10min,authentication_failure,medium,2024-01-23 00:32:00
+302,227,alert,ALERT: replication_lag on mongodb-cluster-01 exceeded 30s -> 223s behind primary,database_failure,high,2024-01-15 08:12:00
+303,246,log,CRITICAL mysql-primary ConnectionPoolExhausted: max 50 connections reached at 2024-01-19 04:07:00,database_failure,high,2024-01-19 04:07:00
+304,133,ticket,DNS lookup failures affecting dns-resolver-prod. Routing misconfiguration suspected on 73.41.228.136.,network_issue,medium,2024-01-21 12:05:00
+305,70,log,ERROR ad-connector TokenValidationException: JWT expired for user skowalski at 2024-01-29 00:25:00,authentication_failure,medium,2024-01-29 00:25:00
+306,121,ticket,VPN connectivity dropped via vpn-concentrator. Firewall blocking outbound on port 9200.,network_issue,medium,2024-01-19 04:10:00
+307,218,alert,ALERT: migration_job V66 = failed for analytics-api in prod-eu,deployment_issue,high,2024-01-24 12:11:00
+308,58,alert,ALERT: oauth_latency_p95 on identity-provider exceeded 500ms -> 1350ms,authentication_failure,medium,2024-01-26 12:40:00
+309,50,ticket,Users unable to authenticate via saml-proxy. Token validation failed for fmüller.,authentication_failure,high,2024-01-25 00:05:00
+310,216,ticket,Blue/green switch failed for gateway-proxy in prod. Old version still serving traffic.,deployment_issue,high,2024-01-24 04:05:00
+311,238,alert,ALERT: connection_pool_usage on mysql-replica exceeded 90% -> 50 connections active,database_failure,high,2024-01-17 12:19:00
+312,72,ticket,Active Directory auth failing via oauth2-server for user tlefevre.,authentication_failure,high,2024-01-29 08:28:00
+313,168,log,ERROR nat-gateway-eu PoolExhausted: no free leases in 10.2.44.0/24 at 2024-01-28 12:18:00,network_issue,medium,2024-01-28 12:18:00
+314,262,alert,ALERT: cert_validation_errors on haproxy-ssl exceeded 0 -> 5 errors for auth.company.com,certificate_expiry,medium,2024-01-15 08:39:00
+315,275,log,CRITICAL api-gateway-tls SAMLCertExpired: assertion signing cert invalid for api.prod.corp at 2024-01-18 00:35:00,certificate_expiry,high,2024-01-18 00:35:00
+316,137,alert,ALERT: lb_5xx_rate on wan-gateway exceeded 1% -> 30% upstream errors,network_issue,medium,2024-01-22 08:40:00
+317,255,alert,ALERT: db_connection_failures on cassandra-node-01 exceeded 1% -> 3% failing,database_failure,high,2024-01-21 00:47:00
+318,56,ticket,Kerberos ticket renewal broken on ad-connector for user tlefevre after patch.,authentication_failure,high,2024-01-26 04:14:00
+319,56,log,CRITICAL ad-connector ConnectionRefused: Redis auth backend unreachable for tlefevre at 2024-01-26 04:29:00,authentication_failure,high,2024-01-26 04:29:00
+320,155,alert,ALERT: wan_throughput on dhcp-server-hq dropped below 500Mbps -> 313Mbps,network_issue,high,2024-01-26 00:40:00
+321,128,log,ERROR dns-resolver-prod PoolExhausted: no free leases in 10.0.11.0/24 at 2024-01-20 12:20:00,network_issue,medium,2024-01-20 12:20:00
+322,7,log,ERROR saml-proxy QueryTimeout: AD LDAP query timed out for alopez at 2024-01-16 08:35:00,authentication_failure,medium,2024-01-16 08:35:00
+323,68,log,WARN token-service RateLimited: token endpoint flooded by requests for ykim at 2024-01-28 12:09:00,authentication_failure,high,2024-01-28 12:09:00
+324,262,ticket,Authentication broken for mchen via haproxy-ssl. TLS handshake failing — cert expired.,certificate_expiry,high,2024-01-15 08:13:00
+325,125,alert,ALERT: wan_throughput on dns-resolver-prod dropped below 500Mbps -> 288Mbps,network_issue,high,2024-01-20 00:29:00
+326,260,log,ERROR nginx-ingress SSLCertExpiredException: certificate for portal.internal expired 6 days ago at 2024-01-15 00:38:00,certificate_expiry,medium,2024-01-15 00:38:00
+327,4,ticket,OAuth2 token endpoint on api-gateway returning 401 for account skowalski.,authentication_failure,high,2024-01-15 16:26:00
+328,122,log,ERROR firewall-cluster RuleViolation: traffic blocked src=167.153.172.130 dst=140.250.153.122 port=5432 at 2024-01-19 08:27:00,network_issue,medium,2024-01-19 08:27:00
+329,10,alert,ALERT: auth_error_rate on ldap-directory exceeded 5% -> 29% over 10min,authentication_failure,medium,2024-01-17 00:37:00
+330,203,log,CRITICAL node-controller NodeNotReady: node hosting auth-worker failed check at 2024-01-21 12:19:00,deployment_issue,high,2024-01-21 12:19:00
+331,66,ticket,Kerberos ticket renewal broken on identity-provider for user dpatel after patch.,authentication_failure,high,2024-01-28 04:00:00
+332,263,ticket,API calls to traefik-ingress failing with SSL verification error. admin.internal cert not trusted.,certificate_expiry,medium,2024-01-15 12:07:00
+333,162,ticket,"High latency on core-switch-A. Network degraded, RTT 476ms to gateway 147.95.187.84.",network_issue,medium,2024-01-27 08:11:00
+334,97,ticket,API gateway api-gateway rejecting Bearer tokens. Auth backend unreachable for jsmith.,authentication_failure,high,2024-02-03 08:09:00
+335,119,log,WARN core-switch-A TopologyChange: STP reconverging on VLAN 30 at 2024-01-18 16:33:00,network_issue,medium,2024-01-18 16:33:00
+336,171,ticket,Deployment rollback triggered for auth-worker in prod-us. Health check failing.,deployment_issue,medium,2024-01-15 04:25:00
+337,108,log,ERROR nat-gateway-eu PoolExhausted: no free leases in 10.0.46.0/24 at 2024-01-16 12:33:00,network_issue,medium,2024-01-16 12:33:00
+338,60,alert,ALERT: auth_error_rate on identity-provider exceeded 5% -> 38% over 10min,authentication_failure,medium,2024-01-27 00:24:00
+339,50,log,ERROR saml-proxy TokenValidationException: JWT expired for user fmüller at 2024-01-25 00:06:00,authentication_failure,medium,2024-01-25 00:06:00
+340,185,log,WARN ci-runner TestFailure: integration tests failed for data-pipeline in prod-apac at 2024-01-18 00:07:00,deployment_issue,high,2024-01-18 00:07:00
+341,136,ticket,Failover not triggering on firewall-cluster. Redundant path to 55.201.65.187 unavailable.,network_issue,high,2024-01-22 04:26:00
+342,115,alert,ALERT: wan_throughput on bgp-peer-isp1 dropped below 500Mbps -> 31Mbps,network_issue,high,2024-01-18 00:49:00
+343,45,alert,ALERT: api_401_rate on kerberos-kdc exceeded 2% -> 12% unauthorized,authentication_failure,high,2024-01-24 00:35:00
+344,171,log,ERROR helm-controller DeployFailed: rollout of auth-worker failed in prod-us at 2024-01-15 04:31:00,deployment_issue,high,2024-01-15 04:31:00
+345,68,alert,ALERT: oauth_latency_p95 on token-service exceeded 500ms -> 1605ms,authentication_failure,medium,2024-01-28 12:14:00
+346,140,ticket,Users on subnet 10.4.13.0/24 reporting packet loss. DNS resolution failing for edge-router-01.,network_issue,medium,2024-01-23 00:17:00
+347,21,ticket,SSO login broken via token-service. JWT expired errors for fmüller in browser console.,authentication_failure,medium,2024-01-19 04:03:00
+348,186,ticket,Blue/green switch failed for notification-worker in prod-eu. Old version still serving traffic.,deployment_issue,high,2024-01-18 04:22:00
+349,88,alert,ALERT: oauth_latency_p95 on saml-proxy exceeded 500ms -> 999ms,authentication_failure,medium,2024-02-01 12:10:00
+350,112,ticket,"High latency on core-switch-A. Network degraded, RTT 778ms to gateway 150.148.153.218.",network_issue,medium,2024-01-17 08:17:00
+351,6,ticket,Kerberos ticket renewal broken on ad-connector for user crossi after patch.,authentication_failure,high,2024-01-16 04:20:00
+352,192,ticket,Container image pull failing for payments-api in prod. Registry credentials expired.,deployment_issue,medium,2024-01-19 08:29:00
+353,129,log,WARN edge-router-01 TopologyChange: STP reconverging on VLAN 20 at 2024-01-20 16:12:00,network_issue,medium,2024-01-20 16:12:00
+354,101,ticket,VPN connectivity dropped via wan-gateway. Firewall blocking outbound on port 5432.,network_issue,medium,2024-01-15 04:00:00
+355,185,ticket,CI/CD pipeline failing at integration stage for data-pipeline after merge to prod-apac.,deployment_issue,medium,2024-01-18 00:02:00
+356,265,alert,ALERT: jwt_signing_cert_expiry on vault-pki -> token validation failing for api.internal,certificate_expiry,high,2024-01-16 00:08:00
+357,75,ticket,LDAP bind failing on saml-proxy. Directory returning connection refused for rnguyen.,authentication_failure,high,2024-01-30 00:08:00
+358,173,log,CRITICAL node-controller NodeNotReady: node hosting billing-service failed check at 2024-01-15 12:22:00,deployment_issue,high,2024-01-15 12:22:00
+359,243,alert,ALERT: slow_queries on cassandra-node-01 exceeded 10/min -> 21/min blocking,database_failure,medium,2024-01-18 12:47:00
+360,274,ticket,"VPN login failing via traefik-ingress. Certificate validation error for skowalski, cert expired.",certificate_expiry,medium,2024-01-17 16:26:00
+361,37,ticket,API gateway ad-connector rejecting Bearer tokens. Auth backend unreachable for jsmith.,authentication_failure,high,2024-01-22 08:14:00
+362,71,log,ERROR sso-provider OAuthError: invalid_grant for ykim at 2024-01-29 04:06:00,authentication_failure,medium,2024-01-29 04:06:00
+363,120,log,ERROR vpn-concentrator PacketLossException: 43% loss on 21.205.26.146 at 2024-01-19 00:06:00,network_issue,medium,2024-01-19 00:06:00
+364,167,alert,ALERT: lb_5xx_rate on core-switch-A exceeded 1% -> 22% upstream errors,network_issue,medium,2024-01-28 08:29:00
+365,200,log,CRITICAL kubelet OOMKilled: container gateway-proxy killed in prod at 2024-01-21 00:28:00,deployment_issue,high,2024-01-21 00:28:00
+366,178,ticket,Database migration V58 failed during billing-service deployment in prod-eu.,deployment_issue,high,2024-01-16 12:29:00
+367,177,alert,ALERT: image_pull_failures for order-service in prod-us -> 10 failures,deployment_issue,medium,2024-01-16 08:21:00
+368,168,ticket,Users cannot reach nat-gateway-eu. NAT translation failing on gateway 115.30.141.222.,network_issue,medium,2024-01-28 12:15:00
+369,2,ticket,Active Directory auth failing via api-gateway for user alopez.,authentication_failure,high,2024-01-15 08:17:00
+370,17,alert,ALERT: kerberos_failures on sso-provider exceeded 10/min -> 31/min,authentication_failure,high,2024-01-18 08:33:00
+371,157,ticket,BGP propagation delay on spine-switch-02 causing connectivity failures from 49.216.193.19.,network_issue,medium,2024-01-26 08:24:00
+372,205,log,WARN ci-runner TestFailure: integration tests failed for data-pipeline in prod at 2024-01-22 00:35:00,deployment_issue,high,2024-01-22 00:35:00
+373,67,log,ERROR oauth2-server QueryTimeout: AD LDAP query timed out for jsmith at 2024-01-28 08:34:00,authentication_failure,medium,2024-01-28 08:34:00
+374,5,ticket,LDAP bind failing on kerberos-kdc. Directory returning connection refused for jsmith.,authentication_failure,high,2024-01-16 00:08:00
+375,18,alert,ALERT: oauth_latency_p95 on kerberos-kdc exceeded 500ms -> 1537ms,authentication_failure,medium,2024-01-18 12:13:00
+376,267,alert,ALERT: saml_cert_invalid on envoy-sds -> SSO login broken for api.internal,certificate_expiry,high,2024-01-16 08:21:00
+377,252,log,"CRITICAL timescaledb-prod OOMKilled: memory limit exceeded, connections dropped at 2024-01-20 08:24:00",database_failure,high,2024-01-20 08:24:00
+378,1,alert,ALERT: jwt_failures on ad-connector exceeded 50/min -> 106/min,authentication_failure,high,2024-01-15 04:19:00
+379,176,alert,ALERT: canary_error_rate on order-service exceeded 5% -> 9.1% in prod-apac,deployment_issue,medium,2024-01-16 04:31:00
+380,162,alert,ALERT: network_latency_ms on core-switch-A p99 exceeded 200ms -> 890ms,network_issue,medium,2024-01-27 08:30:00
+381,126,log,ERROR firewall-cluster UpstreamTimeout: backend 83.40.177.237 unreachable at 2024-01-20 04:06:00,network_issue,medium,2024-01-20 04:06:00
+382,254,alert,ALERT: health_check_failures on clickhouse-01 -> order-service reporting DB unreachable,database_failure,high,2024-01-20 16:32:00
+383,113,alert,ALERT: firewall_drop_rate on dhcp-server-hq exceeded 1% -> 6% blocked,network_issue,high,2024-01-17 12:37:00
+384,237,ticket,Replication lag on mongodb-cluster-01 exceeded 60s. payments-api serving stale data to users.,database_failure,high,2024-01-17 08:10:00
+385,114,ticket,Intermittent packet loss on WAN link via spine-switch-02. Throughput reduced by 45%.,network_issue,medium,2024-01-17 16:30:00
+386,225,alert,ALERT: db_connection_failures on redis-cache exceeded 1% -> 8% failing,database_failure,high,2024-01-15 00:27:00
+387,89,ticket,Password reset failed on session-store. SMTP relay rejecting auth for abolarin.,authentication_failure,high,2024-02-01 16:16:00
+388,10,ticket,Users unable to authenticate via ldap-directory. Token validation failed for mchen.,authentication_failure,high,2024-01-17 00:12:00
+389,215,ticket,CI/CD pipeline failing at integration stage for search-service after merge to prod-core.,deployment_issue,medium,2024-01-24 00:17:00
+390,104,log,ERROR vpn-concentrator HighLatency: RTT 795ms to 130.22.198.252 at 2024-01-15 16:34:00,network_issue,medium,2024-01-15 16:34:00
+391,19,log,ERROR oauth2-server AssertionExpired: SAML response out of skew for mchen at 2024-01-18 16:40:00,authentication_failure,medium,2024-01-18 16:40:00
+392,145,alert,ALERT: wan_throughput on wan-gateway dropped below 500Mbps -> 13Mbps,network_issue,high,2024-01-24 00:26:00
+393,91,log,ERROR mfa-broker OAuthError: invalid_grant for abolarin at 2024-02-02 04:19:00,authentication_failure,medium,2024-02-02 04:19:00
+394,14,log,WARN sso-provider PushTimeout: MFA push undelivered to rnguyen after 30s at 2024-01-17 16:12:00,authentication_failure,medium,2024-01-17 16:12:00
+395,62,log,CRITICAL api-gateway BindFailure: LDAP error 49 invalid credentials for abolarin at 2024-01-27 08:21:00,authentication_failure,high,2024-01-27 08:21:00
+396,94,log,WARN sso-provider PushTimeout: MFA push undelivered to crossi after 30s at 2024-02-02 16:34:00,authentication_failure,medium,2024-02-02 16:34:00
+397,266,ticket,nginx-ingress presenting expired cert for auth.company.com. Users report access denied errors.,certificate_expiry,medium,2024-01-16 04:22:00
+398,149,alert,ALERT: dhcp_utilization on edge-router-01 exceeded 90% -> 92% pool used,network_issue,high,2024-01-24 16:33:00
+399,147,alert,ALERT: lb_5xx_rate on vpn-concentrator exceeded 1% -> 12% upstream errors,network_issue,medium,2024-01-24 08:47:00
+400,69,ticket,Password reset failed on api-gateway. SMTP relay rejecting auth for crossi.,authentication_failure,high,2024-01-28 16:27:00
+401,233,log,WARN mysql-primary SlowQuery: blocking 100 connections for 18.7s at 2024-01-16 12:15:00,database_failure,medium,2024-01-16 12:15:00
+402,248,log,CRITICAL clickhouse-01 ReplicationLagCritical: lag=144s primary diverged at 2024-01-19 12:28:00,database_failure,high,2024-01-19 12:28:00
+403,269,alert,ALERT: certificate_chain_broken on vault-pki for admin.internal -> 6 services affected,certificate_expiry,high,2024-01-16 16:42:00
+404,77,alert,ALERT: kerberos_failures on sso-provider exceeded 10/min -> 14/min,authentication_failure,high,2024-01-30 08:19:00
+405,233,ticket,Slow query on mysql-primary blocking 100 connections. search-service degraded.,database_failure,medium,2024-01-16 12:14:00
+406,236,alert,ALERT: db_query_latency_p99 on elasticsearch-data exceeded 1s -> 31.0s observed,database_failure,medium,2024-01-17 04:17:00
+407,167,ticket,BGP propagation delay on core-switch-A causing connectivity failures from 122.60.121.54.,network_issue,medium,2024-01-28 08:19:00
+408,193,ticket,Kubernetes node NotReady after upgrade. Workloads for gateway-proxy evicted in prod-data.,deployment_issue,medium,2024-01-19 12:08:00
+409,176,log,ERROR traffic-manager SwitchFailed: blue/green aborted for order-service in prod-apac at 2024-01-16 04:36:00,deployment_issue,high,2024-01-16 04:36:00
+410,267,log,WARN envoy-sds CertExpiryWarning: api.internal cert expires in 5 days at 2024-01-16 08:27:00,certificate_expiry,medium,2024-01-16 08:27:00
+411,228,ticket,Connection pool exhausted on postgres-primary. analytics-api pods failing health checks.,database_failure,high,2024-01-15 12:10:00
+412,236,log,CRITICAL elasticsearch-data ConnectionPoolExhausted: max 20 connections reached at 2024-01-17 04:19:00,database_failure,high,2024-01-17 04:19:00
+413,26,log,CRITICAL auth-service ConnectionRefused: Redis auth backend unreachable for alopez at 2024-01-20 04:27:00,authentication_failure,high,2024-01-20 04:27:00
+414,203,ticket,Kubernetes node NotReady after upgrade. Workloads for auth-worker evicted in prod-us.,deployment_issue,medium,2024-01-21 12:14:00
+415,66,log,CRITICAL identity-provider ConnectionRefused: Redis auth backend unreachable for dpatel at 2024-01-28 04:14:00,authentication_failure,high,2024-01-28 04:14:00
+416,176,ticket,Blue/green switch failed for order-service in prod-apac. Old version still serving traffic.,deployment_issue,high,2024-01-16 04:23:00
+417,64,ticket,OAuth2 token endpoint on api-gateway returning 401 for account skowalski.,authentication_failure,high,2024-01-27 16:29:00
+418,123,alert,ALERT: firewall_drop_rate on border-router exceeded 1% -> 15% blocked,network_issue,high,2024-01-19 12:24:00
+419,76,alert,ALERT: session_expiry on ad-connector exceeded 20/min -> 88/min,authentication_failure,high,2024-01-30 04:22:00
+420,271,alert,ALERT: tls_handshake_failures on api-gateway-tls exceeded 1% -> 10% failing for auth.company.com,certificate_expiry,high,2024-01-17 04:21:00
+421,145,log,WARN wan-gateway TranslationFail: SNAT pool exhausted on subnet 10.7.23.0/24 at 2024-01-24 00:29:00,network_issue,medium,2024-01-24 00:29:00
+422,152,ticket,"High latency on nat-gateway-eu. Network degraded, RTT 598ms to gateway 123.184.138.27.",network_issue,medium,2024-01-25 08:27:00
+423,247,alert,ALERT: replication_lag on mongodb-cluster-01 exceeded 30s -> 145s behind primary,database_failure,high,2024-01-19 08:24:00
+424,242,alert,ALERT: db_oom_kills on elasticsearch-data exceeded 0 -> 4 kills in last hour,database_failure,high,2024-01-18 08:32:00
+425,59,ticket,Password reset failed on api-gateway. SMTP relay rejecting auth for crossi.,authentication_failure,high,2024-01-26 16:14:00
+426,177,ticket,Sidecar injection failing for order-service in prod-us. Pods missing Envoy proxy.,deployment_issue,medium,2024-01-16 08:16:00
+427,226,ticket,High query latency on redis-cache. P99 response time 25.3s causing auth-service timeouts.,database_failure,medium,2024-01-15 04:14:00
+428,89,alert,ALERT: ad_bind_failures on session-store exceeded 5/min -> 28/min,authentication_failure,high,2024-02-01 16:27:00
+429,254,ticket,clickhouse-01 crash loop. order-service health check failing due to DB unreachable.,database_failure,high,2024-01-20 16:20:00
+430,219,alert,ALERT: sidecar_injection_failures for order-service exceeded 0 -> 2 missing in prod,deployment_issue,medium,2024-01-24 16:40:00
+431,42,alert,ALERT: sso_failure_rate on api-gateway exceeded 10% -> 28% failing,authentication_failure,high,2024-01-23 08:34:00
+432,166,log,ERROR bgp-peer-isp1 UpstreamTimeout: backend 149.187.21.195 unreachable at 2024-01-28 04:28:00,network_issue,medium,2024-01-28 04:28:00
+433,192,alert,ALERT: oom_kills on payments-api exceeded 0 -> 9 kills in prod,deployment_issue,high,2024-01-19 08:35:00
+434,250,alert,ALERT: primary_unavailable on redis-sentinel -> automatic failover not completed,database_failure,high,2024-01-20 00:35:00
+435,28,alert,ALERT: oauth_latency_p95 on oauth2-server exceeded 500ms -> 1123ms,authentication_failure,medium,2024-01-20 12:17:00
+436,46,log,CRITICAL oauth2-server ConnectionRefused: Redis auth backend unreachable for rnguyen at 2024-01-24 04:17:00,authentication_failure,high,2024-01-24 04:17:00
+437,162,log,ERROR core-switch-A RuleViolation: traffic blocked src=147.95.187.84 dst=60.234.58.68 port=5432 at 2024-01-27 08:25:00,network_issue,medium,2024-01-27 08:25:00
+438,267,ticket,mTLS authentication failed on envoy-sds. Client cert for api.internal expired 5 days ago.,certificate_expiry,high,2024-01-16 08:13:00
+439,48,ticket,Sessions expiring prematurely via mfa-broker. Session store issue affecting alopez.,authentication_failure,high,2024-01-24 12:12:00
+440,20,log,ERROR oauth2-server TokenValidationException: JWT expired for user alopez at 2024-01-19 00:23:00,authentication_failure,medium,2024-01-19 00:23:00
+441,59,alert,ALERT: ad_bind_failures on api-gateway exceeded 5/min -> 18/min,authentication_failure,high,2024-01-26 16:29:00
+442,160,ticket,Users on subnet 10.5.41.0/24 reporting packet loss. DNS resolution failing for border-router.,network_issue,medium,2024-01-27 00:16:00
+443,261,alert,ALERT: tls_handshake_failures on cert-manager exceeded 1% -> 20% failing for api.internal,certificate_expiry,high,2024-01-15 04:24:00
+444,83,ticket,MFA push notifications not delivered via session-store. User crossi locked out.,authentication_failure,high,2024-01-31 12:18:00
+445,213,ticket,Kubernetes node NotReady after upgrade. Workloads for checkout-svc evicted in prod-data.,deployment_issue,medium,2024-01-23 12:12:00
+446,191,alert,ALERT: deployment_rollback triggered for auth-worker in prod-core — health check failing,deployment_issue,medium,2024-01-19 04:28:00
+447,184,log,ERROR pvc-controller VolumeBindTimeout: PVC for reporting-api unbound in prod-eu at 2024-01-17 16:21:00,deployment_issue,medium,2024-01-17 16:21:00
+448,210,ticket,Pod inventory-svc restarting after release in prod-us. OOM kill in kubelet logs.,deployment_issue,high,2024-01-23 00:19:00
+449,3,ticket,MFA push notifications not delivered via api-gateway. User abolarin locked out.,authentication_failure,high,2024-01-15 12:14:00
+450,264,log,ERROR lets-encrypt-agent MTLSAuthFailed: client cert for vpn.corp.net expired at 2024-01-15 16:39:00,certificate_expiry,high,2024-01-15 16:39:00
+451,14,ticket,OAuth2 token endpoint on sso-provider returning 401 for account rnguyen.,authentication_failure,high,2024-01-17 16:01:00
+452,179,ticket,Canary billing-service in prod-apac shows 7.8% error rate. Rollback not triggered.,deployment_issue,medium,2024-01-16 16:24:00
+453,55,ticket,LDAP bind failing on api-gateway. Directory returning connection refused for fmüller.,authentication_failure,high,2024-01-26 00:27:00
+454,100,ticket,Users on subnet 10.7.23.0/24 reporting packet loss. DNS resolution failing for nat-gateway-eu.,network_issue,medium,2024-01-15 00:02:00
+455,121,alert,ALERT: dns_failures on vpn-concentrator exceeded 10/min -> 51/min sustained,network_issue,high,2024-01-19 04:34:00
+456,240,alert,ALERT: primary_unavailable on redis-sentinel -> automatic failover not completed,database_failure,high,2024-01-18 00:14:00
+457,206,ticket,Blue/green switch failed for data-pipeline in prod-eu. Old version still serving traffic.,deployment_issue,high,2024-01-22 04:01:00
+458,146,log,ERROR bgp-peer-isp1 UpstreamTimeout: backend 80.146.8.129 unreachable at 2024-01-24 04:32:00,network_issue,medium,2024-01-24 04:32:00
+459,23,ticket,MFA push notifications not delivered via kerberos-kdc. User ykim locked out.,authentication_failure,high,2024-01-19 12:05:00
+460,44,ticket,OAuth2 token endpoint on oauth2-server returning 401 for account crossi.,authentication_failure,high,2024-01-23 16:25:00
+461,192,log,ERROR containerd ImagePullBackOff: payments-api:latest unauthorized in prod at 2024-01-19 08:43:00,deployment_issue,medium,2024-01-19 08:43:00
+462,196,alert,ALERT: canary_error_rate on gateway-proxy exceeded 5% -> 18.2% in prod-core,deployment_issue,medium,2024-01-20 04:22:00
+463,235,log,ERROR redis-sentinel ConnectionRefused: cannot reach primary host at 2024-01-17 00:33:00,database_failure,medium,2024-01-17 00:33:00
+464,103,log,CRITICAL dns-resolver-prod RouteFlap: BGP session dropped with peer 137.8.123.184 at 2024-01-15 12:16:00,network_issue,high,2024-01-15 12:16:00
+465,231,log,ERROR postgres-primary DiskIOSaturated: write latency 42.5s for reporting-api at 2024-01-16 04:37:00,database_failure,medium,2024-01-16 04:37:00
+466,119,ticket,Load balancer core-switch-A reporting upstream timeouts. Backend 159.180.24.13 unreachable.,network_issue,medium,2024-01-18 16:28:00
+467,164,log,ERROR border-router HighLatency: RTT 658ms to 83.71.95.81 at 2024-01-27 16:20:00,network_issue,medium,2024-01-27 16:20:00
+468,59,log,ERROR api-gateway AssertionExpired: SAML response out of skew for crossi at 2024-01-26 16:29:00,authentication_failure,medium,2024-01-26 16:29:00
+469,172,ticket,Container image pull failing for payments-api in prod. Registry credentials expired.,deployment_issue,medium,2024-01-15 08:00:00
+470,174,log,ERROR pvc-controller VolumeBindTimeout: PVC for payments-api unbound in prod-apac at 2024-01-15 16:22:00,deployment_issue,medium,2024-01-15 16:22:00
+471,105,ticket,Firewall rule blocking traffic between VLAN 200 and VLAN 20 via edge-router-01.,network_issue,medium,2024-01-16 00:09:00
+472,239,ticket,Deadlock detected on timescaledb-prod. reporting-api write operations timing out.,database_failure,high,2024-01-17 16:18:00
+473,143,ticket,DNS lookup failures affecting vpn-concentrator. Routing misconfiguration suspected on 90.211.23.145.,network_issue,medium,2024-01-23 12:18:00
+474,244,alert,ALERT: health_check_failures on mysql-replica -> analytics-api reporting DB unreachable,database_failure,high,2024-01-18 16:07:00
+475,14,alert,ALERT: mfa_push_failures on sso-provider exceeded 5% -> 6% undelivered,authentication_failure,high,2024-01-17 16:23:00
+476,51,log,ERROR identity-provider OAuthError: invalid_grant for abolarin at 2024-01-25 04:15:00,authentication_failure,medium,2024-01-25 04:15:00
+477,167,log,CRITICAL core-switch-A TunnelDown: IPSec SA expired for 122.60.121.54 at 2024-01-28 08:28:00,network_issue,high,2024-01-28 08:28:00
+478,165,log,WARN spine-switch-02 TranslationFail: SNAT pool exhausted on subnet 10.3.18.0/24 at 2024-01-28 00:30:00,network_issue,medium,2024-01-28 00:30:00
+479,122,ticket,"High latency on firewall-cluster. Network degraded, RTT 892ms to gateway 167.153.172.130.",network_issue,medium,2024-01-19 08:19:00
+480,78,alert,ALERT: oauth_latency_p95 on mfa-broker exceeded 500ms -> 1699ms,authentication_failure,medium,2024-01-30 12:33:00
+481,140,log,ERROR edge-router-01 PacketLossException: 23% loss on 153.211.213.143 at 2024-01-23 00:29:00,network_issue,medium,2024-01-23 00:29:00
+482,193,alert,ALERT: nodes_not_ready hosting gateway-proxy -> 3 nodes in NotReady in prod-data,deployment_issue,medium,2024-01-19 12:15:00
+483,57,alert,ALERT: kerberos_failures on sso-provider exceeded 10/min -> 42/min,authentication_failure,high,2024-01-26 08:29:00
+484,178,alert,ALERT: migration_job V58 = failed for billing-service in prod-eu,deployment_issue,high,2024-01-16 12:53:00
+485,256,log,CRITICAL clickhouse-01 ConnectionPoolExhausted: max 10 connections reached at 2024-01-21 04:21:00,database_failure,high,2024-01-21 04:21:00
+486,204,alert,ALERT: pvc_unbound for inventory-svc in prod-data -> 162s waiting,deployment_issue,medium,2024-01-21 16:38:00
+487,166,alert,ALERT: vpn_stability on bgp-peer-isp1 below 99% -> 76% uptime,network_issue,high,2024-01-28 04:46:00
+488,175,log,WARN ci-runner TestFailure: integration tests failed for payments-api in prod-eu at 2024-01-16 00:12:00,deployment_issue,high,2024-01-16 00:12:00
+489,245,alert,ALERT: db_connection_failures on cassandra-node-01 exceeded 1% -> 21% failing,database_failure,high,2024-01-19 00:27:00
+490,58,log,WARN identity-provider RateLimited: token endpoint flooded by requests for dpatel at 2024-01-26 12:29:00,authentication_failure,high,2024-01-26 12:29:00
+491,215,alert,ALERT: ci_failure_rate for search-service exceeded 20% -> 79% failing,deployment_issue,medium,2024-01-24 00:47:00
+492,139,alert,ALERT: dhcp_utilization on border-router exceeded 90% -> 93% pool used,network_issue,high,2024-01-22 16:41:00
+493,183,log,CRITICAL node-controller NodeNotReady: node hosting checkout-svc failed check at 2024-01-17 12:10:00,deployment_issue,high,2024-01-17 12:10:00
+494,130,alert,ALERT: packet_loss_rate on wan-gateway exceeded threshold 5% -> 76% over 10min,network_issue,high,2024-01-21 00:31:00
+495,73,log,ERROR mfa-broker TGTRenewalFailed: KDC unreachable for abolarin at 2024-01-29 12:14:00,authentication_failure,high,2024-01-29 12:14:00
+496,49,alert,ALERT: ad_bind_failures on token-service exceeded 5/min -> 25/min,authentication_failure,high,2024-01-24 16:33:00
+497,233,alert,ALERT: slow_queries on mysql-primary exceeded 10/min -> 39/min blocking,database_failure,medium,2024-01-16 12:27:00
+498,38,ticket,Sessions expiring prematurely via session-store. Session store issue affecting dpatel.,authentication_failure,high,2024-01-22 12:24:00
+499,56,alert,ALERT: session_expiry on ad-connector exceeded 20/min -> 83/min,authentication_failure,high,2024-01-26 04:41:00
+500,95,alert,ALERT: api_401_rate on api-gateway exceeded 2% -> 7% unauthorized,authentication_failure,high,2024-02-03 00:28:00
+501,157,log,CRITICAL spine-switch-02 TunnelDown: IPSec SA expired for 49.216.193.19 at 2024-01-26 08:28:00,network_issue,high,2024-01-26 08:28:00
+502,186,alert,ALERT: canary_error_rate on notification-worker exceeded 5% -> 14.0% in prod-eu,deployment_issue,medium,2024-01-18 04:50:00
+503,78,ticket,Sessions expiring prematurely via mfa-broker. Session store issue affecting fmüller.,authentication_failure,high,2024-01-30 12:08:00
+504,39,log,ERROR auth-service AssertionExpired: SAML response out of skew for abolarin at 2024-01-22 16:29:00,authentication_failure,medium,2024-01-22 16:29:00
+505,147,ticket,BGP propagation delay on vpn-concentrator causing connectivity failures from 113.235.124.254.,network_issue,medium,2024-01-24 08:20:00
+506,130,ticket,Users on subnet 10.9.40.0/24 reporting packet loss. DNS resolution failing for wan-gateway.,network_issue,medium,2024-01-21 00:21:00
+507,112,log,ERROR core-switch-A RuleViolation: traffic blocked src=150.148.153.218 dst=50.89.185.131 port=8443 at 2024-01-17 08:27:00,network_issue,medium,2024-01-17 08:27:00
+508,117,ticket,BGP propagation delay on load-balancer-web causing connectivity failures from 116.247.237.53.,network_issue,medium,2024-01-18 08:07:00
+509,100,log,ERROR nat-gateway-eu PacketLossException: 37% loss on 107.214.82.210 at 2024-01-15 00:15:00,network_issue,medium,2024-01-15 00:15:00
+510,159,ticket,Load balancer dhcp-server-hq reporting upstream timeouts. Backend 133.53.151.107 unreachable.,network_issue,medium,2024-01-26 16:11:00
+511,49,ticket,Password reset failed on token-service. SMTP relay rejecting auth for ykim.,authentication_failure,high,2024-01-24 16:14:00
+512,72,alert,ALERT: sso_failure_rate on oauth2-server exceeded 10% -> 17% failing,authentication_failure,high,2024-01-29 08:53:00
+513,81,log,ERROR sso-provider OAuthError: invalid_grant for alopez at 2024-01-31 04:35:00,authentication_failure,medium,2024-01-31 04:35:00
+514,173,ticket,Kubernetes node NotReady after upgrade. Workloads for billing-service evicted in prod-us.,deployment_issue,medium,2024-01-15 12:11:00
+515,97,alert,ALERT: kerberos_failures on api-gateway exceeded 10/min -> 17/min,authentication_failure,high,2024-02-03 08:39:00
+516,164,alert,ALERT: bgp_sessions on border-router below threshold 2 -> 1 active,network_issue,high,2024-01-27 16:23:00
+517,276,ticket,web-proxy presenting expired cert for vpn.corp.net. Users report access denied errors.,certificate_expiry,medium,2024-01-18 04:03:00
+518,52,alert,ALERT: sso_failure_rate on token-service exceeded 10% -> 45% failing,authentication_failure,high,2024-01-25 08:51:00
+519,160,alert,ALERT: packet_loss_rate on border-router exceeded threshold 5% -> 57% over 10min,network_issue,high,2024-01-27 00:38:00
+520,230,ticket,"postgres-primary primary unavailable. Replica promotion failed, auth-service degraded.",database_failure,high,2024-01-16 00:09:00
+521,212,ticket,Container image pull failing for checkout-svc in prod-eu. Registry credentials expired.,deployment_issue,medium,2024-01-23 08:20:00
+522,87,alert,ALERT: kerberos_failures on mfa-broker exceeded 10/min -> 31/min,authentication_failure,high,2024-02-01 08:07:00
+523,249,ticket,Deadlock detected on cassandra-node-01. search-service write operations timing out.,database_failure,high,2024-01-19 16:00:00
+524,207,alert,ALERT: image_pull_failures for notification-worker in prod-eu -> 1 failures,deployment_issue,medium,2024-01-22 08:36:00
+525,250,ticket,"redis-sentinel primary unavailable. Replica promotion failed, analytics-api degraded.",database_failure,high,2024-01-20 00:08:00
+526,210,log,CRITICAL kubelet OOMKilled: container inventory-svc killed in prod-us at 2024-01-23 00:29:00,deployment_issue,high,2024-01-23 00:29:00
+527,153,alert,ALERT: firewall_drop_rate on core-switch-A exceeded 1% -> 4% blocked,network_issue,high,2024-01-25 12:39:00
+528,268,ticket,SSO login broken via vault-pki. SAML certificate for auth.company.com no longer valid.,certificate_expiry,high,2024-01-16 12:19:00
+529,201,log,ERROR helm-controller DeployFailed: rollout of billing-service failed in prod-eu at 2024-01-21 04:18:00,deployment_issue,high,2024-01-21 04:18:00
+530,106,alert,ALERT: vpn_stability on edge-router-01 below 99% -> 83% uptime,network_issue,high,2024-01-16 04:38:00
+531,175,ticket,CI/CD pipeline failing at integration stage for payments-api after merge to prod-eu.,deployment_issue,medium,2024-01-16 00:00:00
+532,195,alert,ALERT: ci_failure_rate for reporting-api exceeded 20% -> 40% failing,deployment_issue,medium,2024-01-20 00:39:00
+533,45,log,ERROR kerberos-kdc AuthRejected: Bearer token mismatch for fmüller at 2024-01-24 00:30:00,authentication_failure,medium,2024-01-24 00:30:00
+534,92,ticket,Active Directory auth failing via sso-provider for user dpatel.,authentication_failure,high,2024-02-02 08:19:00
+535,239,alert,ALERT: db_deadlocks on timescaledb-prod exceeded 5/min -> 15/min detected,database_failure,high,2024-01-17 16:26:00
+536,149,log,WARN edge-router-01 TopologyChange: STP reconverging on VLAN 100 at 2024-01-24 16:36:00,network_issue,medium,2024-01-24 16:36:00
+537,93,ticket,MFA push notifications not delivered via mfa-broker. User abolarin locked out.,authentication_failure,high,2024-02-02 12:03:00
+538,216,alert,ALERT: canary_error_rate on gateway-proxy exceeded 5% -> 11.3% in prod,deployment_issue,medium,2024-01-24 04:28:00
+539,126,alert,ALERT: vpn_stability on firewall-cluster below 99% -> 97% uptime,network_issue,high,2024-01-20 04:28:00
+540,163,alert,ALERT: firewall_drop_rate on nat-gateway-eu exceeded 1% -> 22% blocked,network_issue,high,2024-01-27 12:33:00
+541,245,log,ERROR cassandra-node-01 ConnectionRefused: cannot reach primary host at 2024-01-19 00:13:00,database_failure,medium,2024-01-19 00:13:00
+542,143,log,CRITICAL vpn-concentrator RouteFlap: BGP session dropped with peer 66.74.8.67 at 2024-01-23 12:32:00,network_issue,high,2024-01-23 12:32:00
+543,102,ticket,"High latency on wan-gateway. Network degraded, RTT 608ms to gateway 19.146.241.179.",network_issue,medium,2024-01-15 08:24:00
+544,113,log,CRITICAL dhcp-server-hq RouteFlap: BGP session dropped with peer 132.210.209.211 at 2024-01-17 12:30:00,network_issue,high,2024-01-17 12:30:00
+545,150,alert,ALERT: packet_loss_rate on border-router exceeded threshold 5% -> 63% over 10min,network_issue,high,2024-01-25 00:31:00
+546,152,alert,ALERT: network_latency_ms on nat-gateway-eu p99 exceeded 200ms -> 624ms,network_issue,medium,2024-01-25 08:32:00
+547,88,ticket,Sessions expiring prematurely via saml-proxy. Session store issue affecting fmüller.,authentication_failure,high,2024-02-01 12:02:00
+548,263,log,ERROR traefik-ingress X509CertExpired: presented cert not trusted by client for admin.internal at 2024-01-15 12:19:00,certificate_expiry,medium,2024-01-15 12:19:00
+549,249,alert,ALERT: db_deadlocks on cassandra-node-01 exceeded 5/min -> 17/min detected,database_failure,high,2024-01-19 16:26:00
+550,187,ticket,Sidecar injection failing for notification-worker in prod. Pods missing Envoy proxy.,deployment_issue,medium,2024-01-18 08:14:00
+551,138,log,ERROR bgp-peer-isp1 PoolExhausted: no free leases in 10.9.49.0/24 at 2024-01-22 12:14:00,network_issue,medium,2024-01-22 12:14:00
+552,199,alert,ALERT: sidecar_injection_failures for gateway-proxy exceeded 0 -> 4 missing in prod-us,deployment_issue,medium,2024-01-20 16:29:00
+553,274,log,ERROR traefik-ingress MTLSAuthFailed: client cert for services.internal expired at 2024-01-17 16:32:00,certificate_expiry,high,2024-01-17 16:32:00
+554,255,log,ERROR cassandra-node-01 ConnectionRefused: cannot reach primary host at 2024-01-21 00:29:00,database_failure,medium,2024-01-21 00:29:00
+555,247,ticket,Replication lag on mongodb-cluster-01 exceeded 60s. checkout-svc serving stale data to users.,database_failure,high,2024-01-19 08:15:00
+556,234,alert,ALERT: health_check_failures on mysql-primary -> analytics-api reporting DB unreachable,database_failure,high,2024-01-16 16:51:00
+557,220,alert,ALERT: pod_restarts on search-service exceeded 3 -> 6 restarts in prod-data,deployment_issue,medium,2024-01-25 00:43:00
+558,33,alert,ALERT: ldap_timeout_rate on ldap-directory exceeded 1% -> 12% timing out,authentication_failure,medium,2024-01-21 12:22:00
+559,96,log,CRITICAL api-gateway ConnectionRefused: Redis auth backend unreachable for dpatel at 2024-02-03 04:31:00,authentication_failure,high,2024-02-03 04:31:00
+560,63,ticket,MFA push notifications not delivered via token-service. User dpatel locked out.,authentication_failure,high,2024-01-27 12:10:00
+561,206,alert,ALERT: canary_error_rate on data-pipeline exceeded 5% -> 18.2% in prod-eu,deployment_issue,medium,2024-01-22 04:30:00
+562,13,ticket,MFA push notifications not delivered via kerberos-kdc. User alopez locked out.,authentication_failure,high,2024-01-17 12:01:00
+563,213,alert,ALERT: nodes_not_ready hosting checkout-svc -> 1 nodes in NotReady in prod-data,deployment_issue,medium,2024-01-23 12:22:00
+564,67,alert,ALERT: kerberos_failures on oauth2-server exceeded 10/min -> 60/min,authentication_failure,high,2024-01-28 08:49:00
+565,237,alert,ALERT: replication_lag on mongodb-cluster-01 exceeded 30s -> 70s behind primary,database_failure,high,2024-01-17 08:38:00
+566,231,alert,ALERT: disk_io_wait on postgres-primary exceeded 80% -> 96% utilisation,database_failure,high,2024-01-16 04:51:00
+567,261,log,ERROR cert-manager TLSHandshakeFailure: ssl verification failed for api.internal at 2024-01-15 04:10:00,certificate_expiry,high,2024-01-15 04:10:00
+568,38,alert,ALERT: oauth_latency_p95 on session-store exceeded 500ms -> 909ms,authentication_failure,medium,2024-01-22 12:36:00
+569,222,ticket,Container image pull failing for checkout-svc in prod-data. Registry credentials expired.,deployment_issue,medium,2024-01-25 08:21:00
+570,95,ticket,LDAP bind failing on api-gateway. Directory returning connection refused for ykim.,authentication_failure,high,2024-02-03 00:02:00
+571,182,ticket,Container image pull failing for notification-worker in prod-apac. Registry credentials expired.,deployment_issue,medium,2024-01-17 08:11:00
+572,219,ticket,Canary order-service in prod shows 11.3% error rate. Rollback not triggered.,deployment_issue,medium,2024-01-24 16:29:00
+573,241,log,ERROR pg-replica-eu DiskIOSaturated: write latency 31.0s for order-service at 2024-01-18 04:26:00,database_failure,medium,2024-01-18 04:26:00
+574,82,ticket,Active Directory auth failing via api-gateway for user alopez.,authentication_failure,high,2024-01-31 08:24:00
+575,156,log,ERROR wan-gateway UpstreamTimeout: backend 191.107.224.205 unreachable at 2024-01-26 04:15:00,network_issue,medium,2024-01-26 04:15:00
+576,158,alert,ALERT: nat_failures on spine-switch-02 exceeded 0.1% -> 8% failing,network_issue,high,2024-01-26 12:31:00
+577,232,ticket,"redis-cache OOM kill. Connection count exceeded limits, auth-service requests failing.",database_failure,high,2024-01-16 08:27:00
+578,86,alert,ALERT: session_expiry on token-service exceeded 20/min -> 21/min,authentication_failure,high,2024-02-01 04:17:00
+579,1,log,ERROR ad-connector OAuthError: invalid_grant for rnguyen at 2024-01-15 04:15:00,authentication_failure,medium,2024-01-15 04:15:00
+580,245,ticket,Database cassandra-node-01 returning connection refused. checkout-svc cannot connect to backend.,database_failure,high,2024-01-19 00:07:00
+581,216,log,ERROR traffic-manager SwitchFailed: blue/green aborted for gateway-proxy in prod at 2024-01-24 04:09:00,deployment_issue,high,2024-01-24 04:09:00
+582,39,ticket,Password reset failed on auth-service. SMTP relay rejecting auth for abolarin.,authentication_failure,high,2024-01-22 16:19:00
+583,227,ticket,Replication lag on mongodb-cluster-01 exceeded 60s. reporting-api serving stale data to users.,database_failure,high,2024-01-15 08:05:00
+584,161,alert,ALERT: dns_failures on firewall-cluster exceeded 10/min -> 19/min sustained,network_issue,high,2024-01-27 04:35:00
+585,198,ticket,Database migration V49 failed during gateway-proxy deployment in prod-data.,deployment_issue,high,2024-01-20 12:30:00
+586,17,ticket,API gateway sso-provider rejecting Bearer tokens. Auth backend unreachable for abolarin.,authentication_failure,high,2024-01-18 08:06:00
+587,12,log,CRITICAL kerberos-kdc BindFailure: LDAP error 49 invalid credentials for alopez at 2024-01-17 08:33:00,authentication_failure,high,2024-01-17 08:33:00
+588,79,ticket,Password reset failed on ad-connector. SMTP relay rejecting auth for bsantos.,authentication_failure,high,2024-01-30 16:13:00
+589,53,log,ERROR mfa-broker TGTRenewalFailed: KDC unreachable for tlefevre at 2024-01-25 12:19:00,authentication_failure,high,2024-01-25 12:19:00
+590,10,log,ERROR ldap-directory TokenValidationException: JWT expired for user mchen at 2024-01-17 00:23:00,authentication_failure,medium,2024-01-17 00:23:00
+591,242,ticket,"elasticsearch-data OOM kill. Connection count exceeded limits, billing-service requests failing.",database_failure,high,2024-01-18 08:04:00
+592,91,alert,ALERT: jwt_failures on mfa-broker exceeded 50/min -> 180/min,authentication_failure,high,2024-02-02 04:34:00
+593,193,log,CRITICAL node-controller NodeNotReady: node hosting gateway-proxy failed check at 2024-01-19 12:22:00,deployment_issue,high,2024-01-19 12:22:00
+594,150,ticket,Users on subnet 10.9.38.0/24 reporting packet loss. DNS resolution failing for border-router.,network_issue,medium,2024-01-25 00:15:00
+595,115,log,WARN bgp-peer-isp1 TranslationFail: SNAT pool exhausted on subnet 10.9.9.0/24 at 2024-01-18 00:41:00,network_issue,medium,2024-01-18 00:41:00
+596,165,alert,ALERT: wan_throughput on spine-switch-02 dropped below 500Mbps -> 402Mbps,network_issue,high,2024-01-28 00:47:00
+597,155,ticket,Firewall rule blocking traffic between VLAN 30 and VLAN 30 via dhcp-server-hq.,network_issue,medium,2024-01-26 00:29:00
+598,234,log,ERROR mysql-primary HealthCheckFailed: analytics-api cannot connect to backend at 2024-01-16 16:27:00,database_failure,high,2024-01-16 16:27:00
+599,196,ticket,Blue/green switch failed for gateway-proxy in prod-core. Old version still serving traffic.,deployment_issue,high,2024-01-20 04:04:00
+600,55,log,ERROR api-gateway AuthRejected: Bearer token mismatch for fmüller at 2024-01-26 00:36:00,authentication_failure,medium,2024-01-26 00:36:00
+601,24,log,WARN session-store PushTimeout: MFA push undelivered to ykim after 30s at 2024-01-19 16:41:00,authentication_failure,medium,2024-01-19 16:41:00
+602,186,log,ERROR traffic-manager SwitchFailed: blue/green aborted for notification-worker in prod-eu at 2024-01-18 04:29:00,deployment_issue,high,2024-01-18 04:29:00
+603,51,ticket,SSO login broken via identity-provider. JWT expired errors for abolarin in browser console.,authentication_failure,medium,2024-01-25 04:13:00
+604,269,ticket,User rnguyen cannot authenticate via vault-pki. TLS cert for admin.internal expired.,certificate_expiry,high,2024-01-16 16:22:00
+605,205,ticket,CI/CD pipeline failing at integration stage for data-pipeline after merge to prod.,deployment_issue,medium,2024-01-22 00:27:00
+606,24,alert,ALERT: mfa_push_failures on session-store exceeded 5% -> 28% undelivered,authentication_failure,high,2024-01-19 16:45:00
+607,5,alert,ALERT: api_401_rate on kerberos-kdc exceeded 2% -> 26% unauthorized,authentication_failure,high,2024-01-16 00:20:00
+608,61,ticket,SSO login broken via saml-proxy. JWT expired errors for skowalski in browser console.,authentication_failure,medium,2024-01-27 04:02:00
+609,15,alert,ALERT: api_401_rate on sso-provider exceeded 2% -> 26% unauthorized,authentication_failure,high,2024-01-18 00:36:00
+610,194,ticket,Helm chart deployment of search-service stuck in pending state in prod. PVC not bound.,deployment_issue,medium,2024-01-19 16:02:00
+611,151,alert,ALERT: dns_failures on wan-gateway exceeded 10/min -> 22/min sustained,network_issue,high,2024-01-25 04:18:00
+612,74,alert,ALERT: mfa_push_failures on token-service exceeded 5% -> 14% undelivered,authentication_failure,high,2024-01-29 16:37:00
+613,86,ticket,Kerberos ticket renewal broken on token-service for user ykim after patch.,authentication_failure,high,2024-02-01 04:09:00
+614,19,alert,ALERT: ad_bind_failures on oauth2-server exceeded 5/min -> 14/min,authentication_failure,high,2024-01-18 16:37:00
+615,135,log,WARN dns-resolver-prod TranslationFail: SNAT pool exhausted on subnet 10.1.30.0/24 at 2024-01-22 00:35:00,network_issue,medium,2024-01-22 00:35:00
+616,118,log,ERROR dns-resolver-prod PoolExhausted: no free leases in 10.2.20.0/24 at 2024-01-18 12:30:00,network_issue,medium,2024-01-18 12:30:00
+617,99,log,ERROR identity-provider AssertionExpired: SAML response out of skew for rnguyen at 2024-02-03 16:22:00,authentication_failure,medium,2024-02-03 16:22:00
+618,182,log,ERROR containerd ImagePullBackOff: notification-worker:latest unauthorized in prod-apac at 2024-01-17 08:26:00,deployment_issue,medium,2024-01-17 08:26:00
+619,180,log,CRITICAL kubelet OOMKilled: container search-service killed in prod-apac at 2024-01-17 00:27:00,deployment_issue,high,2024-01-17 00:27:00
+620,279,alert,ALERT: certificate_chain_broken on traefik-ingress for portal.internal -> 8 services affected,certificate_expiry,high,2024-01-18 16:33:00
+621,107,log,CRITICAL firewall-cluster TunnelDown: IPSec SA expired for 122.197.173.250 at 2024-01-16 08:12:00,network_issue,high,2024-01-16 08:12:00
+622,80,alert,ALERT: auth_error_rate on api-gateway exceeded 5% -> 11% over 10min,authentication_failure,medium,2024-01-31 00:36:00
+623,64,log,WARN api-gateway PushTimeout: MFA push undelivered to skowalski after 30s at 2024-01-27 16:39:00,authentication_failure,medium,2024-01-27 16:39:00
+624,220,ticket,Pod search-service restarting after release in prod-data. OOM kill in kubelet logs.,deployment_issue,high,2024-01-25 00:27:00
+625,159,alert,ALERT: dhcp_utilization on dhcp-server-hq exceeded 90% -> 98% pool used,network_issue,high,2024-01-26 16:19:00
+626,189,ticket,Canary data-pipeline in prod-core shows 12.7% error rate. Rollback not triggered.,deployment_issue,medium,2024-01-18 16:24:00
+627,42,ticket,Active Directory auth failing via api-gateway for user ykim.,authentication_failure,high,2024-01-23 08:27:00
+628,223,ticket,Kubernetes node NotReady after upgrade. Workloads for reporting-api evicted in prod-data.,deployment_issue,medium,2024-01-25 12:27:00
+629,155,log,WARN dhcp-server-hq TranslationFail: SNAT pool exhausted on subnet 10.7.36.0/24 at 2024-01-26 00:39:00,network_issue,medium,2024-01-26 00:39:00
+630,0,alert,ALERT: auth_error_rate on token-service exceeded 5% -> 7% over 10min,authentication_failure,medium,2024-01-15 00:31:00
+631,258,alert,ALERT: connection_pool_usage on mongodb-cluster-01 exceeded 90% -> 20 connections active,database_failure,high,2024-01-21 12:37:00
+632,222,alert,ALERT: oom_kills on checkout-svc exceeded 0 -> 7 kills in prod-data,deployment_issue,high,2024-01-25 08:31:00
+633,31,log,ERROR mfa-broker OAuthError: invalid_grant for fmüller at 2024-01-21 04:10:00,authentication_failure,medium,2024-01-21 04:10:00
+634,82,log,CRITICAL api-gateway BindFailure: LDAP error 49 invalid credentials for alopez at 2024-01-31 08:29:00,authentication_failure,high,2024-01-31 08:29:00
+635,13,alert,ALERT: ldap_timeout_rate on kerberos-kdc exceeded 1% -> 12% timing out,authentication_failure,medium,2024-01-17 12:29:00
+636,200,ticket,Pod gateway-proxy restarting after release in prod. OOM kill in kubelet logs.,deployment_issue,high,2024-01-21 00:18:00
+637,168,alert,ALERT: nat_failures on nat-gateway-eu exceeded 0.1% -> 11% failing,network_issue,high,2024-01-28 12:38:00
+638,180,ticket,Pod search-service restarting after release in prod-apac. OOM kill in kubelet logs.,deployment_issue,high,2024-01-17 00:17:00
+639,146,ticket,Failover not triggering on bgp-peer-isp1. Redundant path to 80.146.8.129 unavailable.,network_issue,high,2024-01-24 04:26:00
+640,36,ticket,Kerberos ticket renewal broken on saml-proxy for user rnguyen after patch.,authentication_failure,high,2024-01-22 04:26:00
+641,136,alert,ALERT: vpn_stability on firewall-cluster below 99% -> 89% uptime,network_issue,high,2024-01-22 04:38:00
+642,223,alert,ALERT: nodes_not_ready hosting reporting-api -> 1 nodes in NotReady in prod-data,deployment_issue,medium,2024-01-25 12:50:00
+643,138,ticket,Users cannot reach bgp-peer-isp1. NAT translation failing on gateway 84.119.163.148.,network_issue,medium,2024-01-22 12:09:00
+644,95,log,ERROR api-gateway AuthRejected: Bearer token mismatch for ykim at 2024-02-03 00:12:00,authentication_failure,medium,2024-02-03 00:12:00
+645,4,alert,ALERT: mfa_push_failures on api-gateway exceeded 5% -> 9% undelivered,authentication_failure,high,2024-01-15 16:55:00
+646,126,ticket,Failover not triggering on firewall-cluster. Redundant path to 83.40.177.237 unavailable.,network_issue,high,2024-01-20 04:04:00
+647,237,log,ERROR mongodb-cluster-01 QueryTimeoutException: query exceeded 30s for payments-api at 2024-01-17 08:25:00,database_failure,medium,2024-01-17 08:25:00
+648,153,ticket,DNS lookup failures affecting core-switch-A. Routing misconfiguration suspected on 153.124.86.176.,network_issue,medium,2024-01-25 12:09:00
+649,109,log,WARN spine-switch-02 TopologyChange: STP reconverging on VLAN 300 at 2024-01-16 16:40:00,network_issue,medium,2024-01-16 16:40:00
+650,65,alert,ALERT: api_401_rate on mfa-broker exceeded 2% -> 16% unauthorized,authentication_failure,high,2024-01-28 00:43:00
+651,277,log,WARN istio-citadel CertExpiryWarning: services.internal cert expires in 3 days at 2024-01-18 08:38:00,certificate_expiry,medium,2024-01-18 08:38:00
+652,257,ticket,Replication lag on postgres-primary exceeded 60s. order-service serving stale data to users.,database_failure,high,2024-01-21 08:10:00
+653,191,log,ERROR helm-controller DeployFailed: rollout of auth-worker failed in prod-core at 2024-01-19 04:32:00,deployment_issue,high,2024-01-19 04:32:00
+654,270,alert,ALERT: ssl_cert_expiry_days for cert-manager below threshold 7 -> 2 days until expiry,certificate_expiry,high,2024-01-17 00:30:00
+655,198,alert,ALERT: migration_job V49 = failed for gateway-proxy in prod-data,deployment_issue,high,2024-01-20 12:39:00
+656,96,ticket,Kerberos ticket renewal broken on api-gateway for user dpatel after patch.,authentication_failure,high,2024-02-03 04:20:00
+657,223,log,CRITICAL node-controller NodeNotReady: node hosting reporting-api failed check at 2024-01-25 12:40:00,deployment_issue,high,2024-01-25 12:40:00
+658,222,log,ERROR containerd ImagePullBackOff: checkout-svc:latest unauthorized in prod-data at 2024-01-25 08:31:00,deployment_issue,medium,2024-01-25 08:31:00
+659,74,log,WARN token-service PushTimeout: MFA push undelivered to skowalski after 30s at 2024-01-29 16:31:00,authentication_failure,medium,2024-01-29 16:31:00
+660,188,log,CRITICAL flyway MigrationFailed: schema V77 failed for reporting-api at 2024-01-18 12:13:00,deployment_issue,high,2024-01-18 12:13:00
+661,201,alert,ALERT: deployment_rollback triggered for billing-service in prod-eu — health check failing,deployment_issue,medium,2024-01-21 04:23:00
+662,22,ticket,Active Directory auth failing via ad-connector for user jsmith.,authentication_failure,high,2024-01-19 08:28:00
+663,188,ticket,Database migration V77 failed during reporting-api deployment in prod-data.,deployment_issue,high,2024-01-18 12:05:00
+664,221,ticket,Deployment rollback triggered for search-service in prod-data. Health check failing.,deployment_issue,medium,2024-01-25 04:04:00
+665,99,ticket,Password reset failed on identity-provider. SMTP relay rejecting auth for rnguyen.,authentication_failure,high,2024-02-03 16:11:00
+666,8,ticket,Sessions expiring prematurely via oauth2-server. Session store issue affecting fmüller.,authentication_failure,high,2024-01-16 12:04:00
+667,125,log,WARN dns-resolver-prod TranslationFail: SNAT pool exhausted on subnet 10.7.20.0/24 at 2024-01-20 00:13:00,network_issue,medium,2024-01-20 00:13:00
+668,182,alert,ALERT: oom_kills on notification-worker exceeded 0 -> 3 kills in prod-apac,deployment_issue,high,2024-01-17 08:26:00
+669,63,alert,ALERT: ldap_timeout_rate on token-service exceeded 1% -> 11% timing out,authentication_failure,medium,2024-01-27 12:16:00
+670,111,alert,ALERT: dns_failures on core-switch-A exceeded 10/min -> 55/min sustained,network_issue,high,2024-01-17 04:40:00
+671,76,ticket,Kerberos ticket renewal broken on ad-connector for user dpatel after patch.,authentication_failure,high,2024-01-30 04:04:00
+672,153,log,CRITICAL core-switch-A RouteFlap: BGP session dropped with peer 107.86.71.69 at 2024-01-25 12:17:00,network_issue,high,2024-01-25 12:17:00
+673,164,ticket,Intermittent packet loss on WAN link via border-router. Throughput reduced by 75%.,network_issue,medium,2024-01-27 16:06:00
+674,194,alert,ALERT: pvc_unbound for search-service in prod -> 282s waiting,deployment_issue,medium,2024-01-19 16:21:00
+675,137,ticket,BGP propagation delay on wan-gateway causing connectivity failures from 80.96.57.9.,network_issue,medium,2024-01-22 08:23:00
+676,123,log,CRITICAL border-router RouteFlap: BGP session dropped with peer 171.194.75.211 at 2024-01-19 12:25:00,network_issue,high,2024-01-19 12:25:00
+677,263,alert,ALERT: ssl_auth_failures on traefik-ingress exceeded 5% -> 19% users affected,certificate_expiry,high,2024-01-15 12:16:00
+678,52,log,CRITICAL token-service BindFailure: LDAP error 49 invalid credentials for mchen at 2024-01-25 08:35:00,authentication_failure,high,2024-01-25 08:35:00
+679,264,ticket,"VPN login failing via lets-encrypt-agent. Certificate validation error for jsmith, cert expired.",certificate_expiry,medium,2024-01-15 16:28:00
+680,40,ticket,Users unable to authenticate via ldap-directory. Token validation failed for dpatel.,authentication_failure,high,2024-01-23 00:03:00
+681,148,alert,ALERT: nat_failures on load-balancer-web exceeded 0.1% -> 10% failing,network_issue,high,2024-01-24 12:51:00
+682,34,alert,ALERT: mfa_push_failures on ad-connector exceeded 5% -> 30% undelivered,authentication_failure,high,2024-01-21 16:19:00
+683,181,log,ERROR helm-controller DeployFailed: rollout of gateway-proxy failed in prod at 2024-01-17 04:20:00,deployment_issue,high,2024-01-17 04:20:00
+684,133,alert,ALERT: firewall_drop_rate on dns-resolver-prod exceeded 1% -> 16% blocked,network_issue,high,2024-01-21 12:26:00
+685,85,ticket,LDAP bind failing on auth-service. Directory returning connection refused for mchen.,authentication_failure,high,2024-02-01 00:11:00
+686,185,alert,ALERT: ci_failure_rate for data-pipeline exceeded 20% -> 53% failing,deployment_issue,medium,2024-01-18 00:09:00
+687,49,log,ERROR token-service AssertionExpired: SAML response out of skew for ykim at 2024-01-24 16:29:00,authentication_failure,medium,2024-01-24 16:29:00
+688,244,ticket,mysql-replica crash loop. analytics-api health check failing due to DB unreachable.,database_failure,high,2024-01-18 16:01:00
+689,8,alert,ALERT: oauth_latency_p95 on oauth2-server exceeded 500ms -> 831ms,authentication_failure,medium,2024-01-16 12:33:00
+690,27,ticket,API gateway oauth2-server rejecting Bearer tokens. Auth backend unreachable for jsmith.,authentication_failure,high,2024-01-20 08:21:00
+691,43,log,ERROR mfa-broker TGTRenewalFailed: KDC unreachable for rnguyen at 2024-01-23 12:38:00,authentication_failure,high,2024-01-23 12:38:00
+692,107,ticket,BGP propagation delay on firewall-cluster causing connectivity failures from 122.197.173.250.,network_issue,medium,2024-01-16 08:10:00
+693,172,alert,ALERT: oom_kills on payments-api exceeded 0 -> 3 kills in prod,deployment_issue,high,2024-01-15 08:11:00
+694,41,log,ERROR token-service OAuthError: invalid_grant for abolarin at 2024-01-23 04:34:00,authentication_failure,medium,2024-01-23 04:34:00
